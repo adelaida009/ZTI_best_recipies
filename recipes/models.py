@@ -16,10 +16,10 @@ class User(models.Model):
 
 
 #Tworzenie modelu ulubionych
-class Favourites(models.Model):
-    owner = models.ForeignKey(
-        "auth.User",
-        related_name="recipes",
-        on_delete=models.CASCADE
-    )
+#class Favourites(models.Model):
+#    owner = models.ForeignKey(
+#        "auth.User",
+#        related_name="recipes",
+#        on_delete=models.CASCADE
+#    )
     ##################3#### SKOPIOWAĆ Z PRZEPISU RESZTĘ
