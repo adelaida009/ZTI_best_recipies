@@ -16,16 +16,20 @@ class RecipeView(DetailView):
 
 def add_to_list(request, slug):
     recipe = get_object_or_404(Recipe, slug=slug)
-    added_recipe = AddedRecipe.objects.create(recipe = recipe)
+    if AddedRecipe.objects.filter(recipe=recipe):
+        added_recipe = AddedRecipe.objects.filter(recipe=recipe)[0]
+    else:
+        added_recipe = AddedRecipe.objects.create(recipe = recipe)
     list_qs = ShoppingList.objects.filter(user=request.user)
     if list_qs:
         list = list_qs[0]
+        if list.ingridients.filter(slug=recipe.slug):
+            added_recipe.quantity += 1
+            added_recipe.save()
     else:
-        creation_date = timezone.now()
         list = ShoppingList.objects.create(user=request.user,
-                                           creation_date=creation_date)
-        print(recipe.ingredients)
-        list.ingridients.add(recipe.ingredients)
+                                           creation_date = timezone.now())
+        list.ingridients.add(added_recipe)
         list.save()
     return redirect("recipes:recipe",slug = slug)
 
@@ -34,9 +38,10 @@ def remove_from_list(request, slug):
     list_qs = ShoppingList.objects.filter(user=request.user)
     if list_qs:
         list = list_qs[0]
-        if list.ingridients.filter(recipe__slug=recipe.slug).exist():
-            list.ingridients.remove(recipe.ingredients)
+        if list.ingridients.filter(slug=recipe.slug):
+            list.ingridients.remove(recipe)
+            return redirect("recipes:recipe", slug=slug)
 
     else:
-        return redirect("recipes:product", slug=slug)
+        return redirect("recipes:recipe", slug=slug)
     return redirect("recipes:recipe", slug=slug)

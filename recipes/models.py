@@ -23,19 +23,6 @@ class User(models.Model):
     def __str__(self):
         return self.nick
 
-#Tworzenie modelu listy zakupów
-class ShoppingList(models.Model):
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete = models.CASCADE
-    )
-    ingridients = models.CharField(max_length=1000, blank=True)
-    creation_date = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"Lista zakupów"
-
-
 # Tworzenie modelu przepisu
 class Recipe(models.Model):
     title = models.CharField(max_length=200, blank=False)
@@ -64,11 +51,29 @@ class Recipe(models.Model):
             "slug": self.slug
         })
 
+    def remove_from_list_url(self):
+        return reverse("recipes:remove-from-list", kwargs={
+            "slug": self.slug
+        })
+#Tworzenie modelu listy zakupów
+class ShoppingList(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete = models.CASCADE
+    )
+    ingridients = models.ManyToManyField(Recipe)
+    creation_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Lista zakupów"
+
 class AddedRecipe(models.Model):
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE
     )
+    quantity = models.IntegerField()
+
     def __str__(self):
         return self.recipe
 
