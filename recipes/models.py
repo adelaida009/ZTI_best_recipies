@@ -4,25 +4,6 @@ from django.core.validators import RegexValidator
 from django.shortcuts import reverse
 
 # Create your models here.
-
-# Tworzenie modelu użytkownika
-class User(models.Model):
-    nick = models.CharField(max_length=100, blank=False,
-                            unique=True)
-    e_mail = models.EmailField(max_length=250,blank=False,
-                              unique=True)
-
-    phone_validator = RegexValidator(regex=r'^\+?1?\d{9}$',
-                                     message="Numer telefonu musi byc wprowadzony w formacie  XXXXXXXXX")
-    phone_number = models.CharField(validators=[phone_validator], max_length=12, blank=False)
-    join_date = models.DateTimeField(auto_now_add=True)
-    password = models.CharField(max_length=20, blank=False)
-
-
-
-    def __str__(self):
-        return self.nick
-
 # Tworzenie modelu przepisu
 class Recipe(models.Model):
     title = models.CharField(max_length=200, blank=False)
@@ -55,27 +36,34 @@ class Recipe(models.Model):
         return reverse("recipes:remove-from-list", kwargs={
             "slug": self.slug
         })
+
+class AddedRecipe(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+    )
+    recipe = models.ForeignKey(
+        Recipe,
+        on_delete=models.CASCADE
+    )
+    quantity = models.IntegerField(default=1)
+
+    def __str__(self):
+        return f"{self.quantity} of {self.recipe.title}"
+
 #Tworzenie modelu listy zakupów
 class ShoppingList(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete = models.CASCADE
     )
-    ingridients = models.ManyToManyField(Recipe)
+    ingridients = models.ManyToManyField(AddedRecipe)
     creation_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"Lista zakupów"
-
-class AddedRecipe(models.Model):
-    recipe = models.ForeignKey(
-        Recipe,
-        on_delete=models.CASCADE
-    )
-    quantity = models.IntegerField()
-
-    def __str__(self):
-        return self.recipe
 
 class Favourities(models.Model):
     user = models.ForeignKey(
