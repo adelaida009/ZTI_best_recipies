@@ -21,6 +21,7 @@ class Recipe(models.Model):
         on_delete=models.DO_NOTHING,
     )
     slug = models.SlugField()
+    tags = models.CharField(max_length=100, blank=False)
 
     def __str__(self):
         return self.title
@@ -42,6 +43,11 @@ class Recipe(models.Model):
 
     def remove_from_list_url(self):
         return reverse("recipes:remove-from-list", kwargs={
+            "slug": self.slug
+        })
+
+    def update_recipe_url(self):
+        return reverse("recipes:update-recipe", kwargs={
             "slug": self.slug
         })
 
@@ -99,6 +105,11 @@ class ShoppingList(models.Model):
                 found = False
         return items.items()
 
+    def send_list_url(self):
+        ingridients = self.sum_ingridients()
+        return reverse("recipes:send-list", kwargs={
+            "ingridients" : list(ingridients)
+        })
 
     def __str__(self):
         return f"Lista zakupów"

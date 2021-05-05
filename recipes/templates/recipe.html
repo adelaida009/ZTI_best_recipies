@@ -69,6 +69,9 @@
 					    <a class="nav-link" href="/favourites"><i class="fas fa-user fa-fw mr-2"></i>Mój profil</a>
 					</li>
 					<li class="nav-item">
+					    <a class="nav-link" href="/my-recipes"><i class="fas fa-user fa-fw mr-2"></i>Moje przepisy</a>
+					</li>
+					<li class="nav-item">
 					    <a class="nav-link" href="/shopping-list/"><i class="fas fa-user fa-fw mr-2"></i>Lista zakupów</a>
 					</li>
 					<li class="nav-item">
@@ -116,11 +119,18 @@
 						Add to list
 						<i class="fas fa-shopping-cart ml-1"></i>
 					</a>
-					<a href="{{object.remove_from_list_url }}" class="btn btn-danger"><i class="far fa-trash-alt"></i> Wypierdol z listy</a>
+					<a href="{{object.remove_from_list_url }}" class="btn btn-danger"><i class="far fa-trash-alt"></i> Usuń z listy zakupów </a>
 					<a href="{{object.add_to_favourites_url}}" class="btn btn-primary btn-md my-0 p">
 						Dodaj do ulubionych
 						<i class="fas fa-shopping-cart ml-1"></i>
 					</a>
+					{% if object.created_by == request.user %}
+						<a href="{{object.update_recipe_url}}" class="btn btn-danger btn-md my-0 p">
+						Edytuj przepis
+						<i class="fas fa-shopping-cart ml-1"></i>
+					</a>
+					{% endif %}
+					<div class="meta mb-1"><span class="date">Tagi: {{ object.tags}}</span></div>
 					<pre>
 
 					    <code>

@@ -7,12 +7,17 @@ from .models import Recipe, AddedRecipe, ShoppingList, Favourities
 from .forms import RecipeForm
 from django.utils.text import slugify
 from unidecode import unidecode
+from django.core.mail import send_mail
 # Create your views here.
 
 
 class HomeView(ListView):
     model = Recipe
     template_name = "main_page.html"
+
+class MyRecipes(ListView):
+    model = Recipe
+    template_name = "my_recipes.html"
 
 class ShoppingListSummaryView(ListView):
     model = ShoppingList
@@ -22,6 +27,36 @@ class ShoppingListSummaryView(ListView):
 class FavouritiesView(ListView):
     model = Favourities
     template_name = "favourites.html"
+
+def update_recipe(request, slug):
+    recipe = get_object_or_404(Recipe, slug=slug)
+    form = RecipeForm(request.POST or None,
+                      instance=recipe)
+    if form.is_valid():
+        form.save()
+        return redirect("recipes:recipe",slug = slug)
+    return render(request, "update_recipe.html", {
+        "recipe":recipe,
+        "form":form}
+                  )
+
+def send_list(request, ingridients):
+    message = ""
+    list = get_object_or_404(ShoppingList, user = request.user)
+    list.delete()
+    res = ingridients.strip('][').split(', (')
+    for ingridient in res:
+        res2 = ingridient.strip(')()').split(', ')
+        message += f"{res2[0]} : {res2[1]} \n"
+    send_mail(
+        'Lista zakupów',
+         message,
+        'uczen543@gmail.com',
+        [f"{request.user.email}"],
+        fail_silently=False,
+    )
+    print(request.user)
+    return render(request, "send_email.html", {})
 
 def add_to_favourites(request, slug):
     recipe = get_object_or_404(Recipe,slug=slug)
@@ -49,10 +84,6 @@ def add_to_list(request, slug):
         recipe=recipe,
         user=request.user
     )
-    #if added_recipe_qs.exists():
-    #    added_recipe = added_recipe_qs[0]
-    #else:
-    #    added_recipe = AddedRecipe.objects.create(recipe = recipe)
     list_qs = ShoppingList.objects.filter(user=request.user)
     if list_qs:
         list = list_qs[0]
@@ -99,8 +130,17 @@ def remove_from_list(request, slug):
 def search_recipe(request):
     if request.method == "POST":
         tag = request.POST.get("tag")
-        recipes = Recipe.objects.filter(title__contains=tag)
-
+        recipes_by_title = Recipe.objects.filter(title__contains=tag)
+        recipes_by_tag = Recipe.objects.filter(tags__contains=tag)
+        recipes = list(recipes_by_tag)
+        for recipe in recipes_by_title.all():
+            flag = True
+            for tag_recipe in recipes:
+                if tag_recipe.title==recipe.title:
+                    flag = False
+            if flag:
+                recipes.append(recipe)
+                flag = True
         return render(request, "search.html",
                       {"tag":tag,
                        "recipes":recipes})

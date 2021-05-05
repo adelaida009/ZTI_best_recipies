@@ -1,8 +1,27 @@
 from django import forms
+from .models import Recipe
 
-
-class RecipeForm(forms.Form):
-    title = forms.CharField(max_length=200)
-    photo = forms.CharField(max_length=1000)  # URL of the photo
-    description = forms.CharField(max_length=2000)
-    ingredients = forms.CharField(max_length=1000)
+class RecipeForm(forms.ModelForm):
+    class Meta:
+        model = Recipe
+        fields = (
+            "title",
+            "photo",
+            "description",
+            "ingredients",
+            "tags"
+        )
+        labels={
+            "title": "",
+            "photo": "",
+            "description": "",
+            "ingredients": "",
+            "tags" : "",
+        }
+        widgets = {
+            "title": forms.TextInput(attrs={"class":"form-control", "placeholder":"Tytuł"}),
+            "photo":forms.TextInput(attrs={"class":"form-control", "placeholder":"Zdjęcie"}),
+            "description":forms.TextInput(attrs={"class":"form-control", "placeholder":"Opis"}),
+            "ingredients": forms.TextInput(attrs={"class":"form-control", "placeholder":"Składniki"}),
+            "tags": forms.TextInput(attrs={"class": "form-control", "placeholder": "Tagi"}),
+        }

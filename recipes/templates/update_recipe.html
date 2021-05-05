@@ -83,41 +83,15 @@
 			</div>
 		</nav>
     </header>
-    
     <div class="main-wrapper">
-
-	    <section class="blog-list px-3 py-5 p-md-5">
-        <div class="container">
-              <tr>
-                  <td colspan="1"><a class="btn btn-primary float-right" href="/add-recipe">Dodaj przepis</a></td>
-                  <td colspan="1"></td>
-              </tr>
-            <nav class="navbar navbar-light bg-light justify-content-between">
-              <a class="navbar-brand">Szukaj Przepisu</a>
-              <form class="d-flex" method="POST" action="/search-recipe/">
-                  {% csrf_token %}
-                  <input class="form-control mr-sm-2" type="search" placeholder="Wpisz wyszukiwaną frazę" aria-label="Search" name="tag">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Szukaj</button>
-              </form>
-            </nav>
-        </div>
-            <div class="container">
-				{% for recipe in object_list %}
-			    <div class="item mb-5">
-				    <div class="media">
-					    <img class="mr-3 img-fluid post-thumb d-none d-md-flex" src="{% static 'images/blog/blog-post-thumb-8.jpg' %}" alt="image">
-					    <div class="media-body">
-						    <h3 class="title mb-1"><a href="{{recipe.get_absolute_url}}">{{ recipe.title}}</a></h3>
-						    <div class="meta mb-1"><span class="date">Dodane {{ recipe.created}}</span><span class="time">Dodane przez {{ recipe.created_by }}</span></div>
-						    <div class="intro">{{ recipe.description }}</div>
-						    <a class="more-link" href="{{recipe.get_absolute_url}}">Czytaj więcej &rarr;</a>
-							<div class="meta mb-1"><span class="date">Tagi: {{ recipe.tags}}</span></div>
-					    </div><!--//media-body-->
-				    </div><!--//media-->
-			    </div><!--//item-->
-				{% endfor %}
-		    </div>
-	    </section>
+     <section class="blog-list px-3 py-5 p-md-5">
+		    <div class="container">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit">Zatwierdź zmiany</button>
+            </div>
+     </section>
 	    
 	    <footer class="footer text-center py-2 theme-bg-dark">
 		   
@@ -166,4 +140,3 @@
 
 </body>
 </html> 
-
