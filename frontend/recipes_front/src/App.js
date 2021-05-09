@@ -1,42 +1,40 @@
-import React, { Component } from 'react';
-import { useState } from 'react';
-import './App.css';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
-
-import Form from "./components/Form";
-import Dashboard from './components/Dashboard/Dashboard';
-import Preferences from './components/Preferences/Preferences';
-import Login from './components/Login/Login';
+import React, { Component } from "react";
+import { BrowserRouter as Router } from "react-router-dom";
+import { connect } from "react-redux";
+import BaseRouter from "./routes";
+import * as actions from "./store/actions/auth";
+import "semantic-ui-css/semantic.min.css";
+import CustomLayout from "./containers/Layout";
 
 class App extends Component {
-  getRecipe = (e) => {
-    const recipeName = e.target.elements.recipeName.value;
-    const [token, setToken] = useState();
-    e.preventDefault();
-    console.log(recipeName);
-
-    if(!token) {
-    return <Login setToken={setToken} />
-  }
+  componentDidMount() {
+    this.props.onTryAutoSignup();
   }
 
   render() {
     return (
-        <div className="wrapper">
-          <h1>Application</h1>
-          <BrowserRouter>
-            <Switch>
-              <Route path="/dashboard">
-                <Dashboard />
-              </Route>
-              <Route path="/preferences">
-                <Preferences />
-              </Route>
-            </Switch>
-          </BrowserRouter>
-        </div>
+      <Router>
+        <CustomLayout {...this.props}>
+          <BaseRouter />
+        </CustomLayout>
+      </Router>
     );
   }
 }
 
-export default App;
+const mapStateToProps = state => {
+  return {
+    isAuthenticated: state.auth.token !== null
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onTryAutoSignup: () => dispatch(actions.authCheckState())
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App);
