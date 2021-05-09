@@ -1,6 +1,8 @@
 import React from 'react'
 import axios from 'axios';
-import { Button, Container, Icon, Image, Item, Label } from 'semantic-ui-react'
+import { Button, Container,Dimmer, Icon, Image, Item, Label, Loader, Message, Segment} from 'semantic-ui-react'
+
+import {recipeListURL} from '../constants'
 
 const paragraph = <Image src='/images/wireframe/short-paragraph.png' />
 
@@ -15,26 +17,43 @@ class RecipeList extends React.Component{
     componentDidMount(){
         this.setState({loading: true});
         axios
-        .get('./some-url')
-        .then(res => {
+          .get(recipeListURL)
+          .then(res => {
             this.setState({data: res.data, loading: false});
-        })
-        .catch(err => {
+          })
+          .catch(err => {
             this.setState({error: err, loading: false});
-        })
+          })
     }
 
     render(){
-        return(
-            <Container>
+      const {data, error, loading} = this.state;
+      return(
+        <Container>
+          {error && (
+            <Message
+              error
+              header='There was some errors with your submission'
+              content = {JSON.stringify(error)}
+            />
+          )}
+          {loading && (
+            <Segment>
+              <Dimmer active inverted>
+                <Loader inverted>Loading</Loader>
+              </Dimmer>
+
+              <Image src='/images/recipes/spageto.jpg' />
+            </Segment>
+          )}
               <Item.Group divided>
                 <Item>
-                  <Item.Image src='/images/wireframe/image.png' />
+                  <Item.Image src='/images/recipes/spageto.jpg' />
 
                   <Item.Content>
-                    <Item.Header as='a'>My Neighbor Totoro</Item.Header>
+                    <Item.Header as='a'>Spaghetti Bolognese</Item.Header>
                     <Item.Meta>
-                      <span className='cinema'>IFC Cinema</span>
+                      <span className='cinema'>Nie wiem co tu napisac</span>
                     </Item.Meta>
                     <Item.Description>{paragraph}</Item.Description>
                     <Item.Extra>
@@ -42,7 +61,7 @@ class RecipeList extends React.Component{
                         Add to favourites!
                         <Icon name='heart' />
                       </Button>
-                      <Label>Limited</Label>
+                      <Label>Vegan</Label>
                     </Item.Extra>
                   </Item.Content>
                 </Item>
