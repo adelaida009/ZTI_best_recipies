@@ -94,7 +94,6 @@ class ShoppingList(models.Model):
         found = False
         for ingridient in self.ingridients.all():
             elements = ingridient.get_ingridients()
-            print(elements)
             for element in elements:
                 for k in items.keys():
                     if element[0] == k:

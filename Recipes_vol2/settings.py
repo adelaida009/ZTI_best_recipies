@@ -43,7 +43,12 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'django.contrib.staticfiles',
     "recipes",
-    "crispy_forms"
+    "crispy_forms",
+    "rest_auth",
+    "corsheaders",
+    "rest_auth.registration",
+    "rest_framework",
+    "rest_framework.authtoken",
 ]
 
 SITE_ID = 1
