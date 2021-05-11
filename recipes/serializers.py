@@ -1,11 +1,9 @@
 from rest_framework import serializers
-from .models import Recipe, ShoppingList, AddedRecipe
+from .models import Recipe, ShoppingList, AddedRecipe, Favourities
 
 class StringSerializer(serializers.StringRelatedField):
     def to_internal_value(self, value):
         return value
-
-
 
 class RecipeSerializer(serializers.ModelSerializer):
     class Meta:
@@ -22,17 +20,18 @@ class RecipeSerializer(serializers.ModelSerializer):
         "tags"
         )
 
-class ShoppingListSerializer(serializers.ModelSerializer):
-    ingridients = StringSerializer()
+class FavouritesSerializer(serializers.Serializer):
+    recipes = RecipeSerializer(read_only = True, many=True)
     class Meta:
-        model = ShoppingList
+        model = Favourities
         fields = (
-        "id",
-        "ingridients",
+            "id",
+            "user",
+            "recipes"
         )
 
 class AddedRecipeSerializer(serializers.ModelSerializer):
-    recipe = serializers.SerializerMethodField()
+    recipe = StringSerializer()
     class Meta:
         model = AddedRecipe
         fields = (
@@ -41,5 +40,14 @@ class AddedRecipeSerializer(serializers.ModelSerializer):
         "quantity"
         )
 
-    def get_ingridients(self):
-        return AddedRecipeSerializer(obj.ingridients.all(), many=True).data
+class ShoppingListSerializer(serializers.ModelSerializer):
+    ingridients = serializers.SerializerMethodField()
+    class Meta:
+        model = ShoppingList
+        fields = (
+        "id",
+        "ingridients",
+        )
+
+    def get_ingridients(self, obj):
+        return AddedRecipeSerializer(obj.items.all(), many=True).data

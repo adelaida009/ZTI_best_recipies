@@ -24,7 +24,6 @@ class ShoppingListSummaryView(ListView):
     model = ShoppingList
     template_name = "shopping_list_summary.html"
 
-
 class FavouritiesView(ListView):
     model = Favourities
     template_name = "favourites.html"
