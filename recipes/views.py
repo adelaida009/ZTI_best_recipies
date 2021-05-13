@@ -13,6 +13,7 @@ from django.core.mail import send_mail
 
 class HomeView(ListView):
     model = Recipe
+    paginate_by = 10
     template_name = "main_page.html"
 
 class MyRecipes(ListView):
@@ -22,7 +23,6 @@ class MyRecipes(ListView):
 class ShoppingListSummaryView(ListView):
     model = ShoppingList
     template_name = "shopping_list_summary.html"
-
 
 class FavouritiesView(ListView):
     model = Favourities
