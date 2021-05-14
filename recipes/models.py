@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.core.validators import RegexValidator
 from django.shortcuts import reverse
+from django.utils import timezone
 from django.utils.text import slugify
 from unidecode import unidecode
 import json
@@ -25,6 +26,11 @@ class Recipe(models.Model):
 
     def __str__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        newslug = '{0} {1}'.format(self.title, timezone.now())
+        self.slug = slugify(unidecode(newslug))
+        super(Recipe, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
         return reverse("recipes:recipe", kwargs={

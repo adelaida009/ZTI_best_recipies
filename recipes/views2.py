@@ -1,5 +1,5 @@
 import django_filters
-from rest_framework.generics import ListAPIView, RetrieveAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import ListAPIView, RetrieveAPIView, RetrieveUpdateDestroyAPIView, ListCreateAPIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
@@ -27,27 +27,17 @@ class RecipeFilter(django_filters.FilterSet):
         "tags"
         )
 
-class RecipeListView(ListAPIView):
+class RecipeListView(ListCreateAPIView):
     serializer_class = RecipeSerializer
     queryset = Recipe.objects.all()
     permission_classes = (AllowAny,)
-    filter_class = RecipeFilter
-    filter_fields = {
+    search_fields = (
         "title",
         "ingredients",
         "created",
         "tags"
-    }
-    search_fields = (
-        "^title",
-        "^ingredients",
-        "^created",
-        "^tags"
     )
-    ordering_fields = (
-        "title",
-        "created",
-    )
+
 
 class RecipeDetailView(RetrieveUpdateDestroyAPIView):
     queryset = Recipe.objects.all()
@@ -81,20 +71,24 @@ class RecipeDetailView(RetrieveUpdateDestroyAPIView):
 
 class MyRecipesView(ListAPIView):
     serializer_class = RecipeSerializer
-    queryset = Recipe.objects.all()
     permission_classes = (AllowAny, )
+
+    def get_queryset(self):
+        try:
+            recipes = Recipe.objects.filter(created_by=self.request.user)
+            #favourites = Favourities.objects.get(user=self.request.user)
+            return recipes
+        except:
+            return Response({"message": "Nie stworzyłeś żadnych przepisów"}, status=HTTP_400_BAD_REQUEST)
 
 class SendListView(APIView):
     def post(self, request, *args, **kwargs):
         message = ""
         e_mail = request.data.get("e-mail", None)
-        ingridients = request.data.get("ingridients", None)
         list = get_object_or_404(ShoppingList, user=request.user)
-        list.delete()
-        res = ingridients.strip('][').split(', (')
-        for ingridient in res:
-            res2 = ingridient.strip(')()').split(', ')
-            message += f"{res2[0]} : {res2[1]} \n"
+        ingridients = list.sum_ingridients()
+        for ingridient in ingridients:
+            message += f"{ingridient[0]} : {ingridient[1]} \n"
         send_mail(
             'Lista zakupów',
             message,
@@ -102,14 +96,16 @@ class SendListView(APIView):
             [f"{e_mail}"],
             fail_silently=False,
         )
+        #list.detele()
+        #AddedRecipe.objects.filter(user=request.user).delete()
+        print(message)
         return Response({"message" : "Lista została wysłana"}, status=HTTP_200_OK)
 
 class AddToFavouritesView(APIView):
     def post(self, request, *args, **kwargs):
         slug = request.data.get("slug", None)
-        user = request.data.get("user", None)
         recipe = get_object_or_404(Recipe, slug=slug)
-        favourite_qs = Favourities.objects.filter(user=user)
+        favourite_qs = Favourities.objects.filter(user=request.user)
         if favourite_qs:
             favourite = favourite_qs[0]
             if favourite.recipes.filter(slug=recipe.slug).exists():
@@ -125,15 +121,14 @@ class AddToFavouritesView(APIView):
 class AddToListView(APIView):
     def post(self, request, *args, **kwargs):
         slug = request.data.get("slug", None)
-        user = request.data.get("user", None)
         #if slug or user is None:
         #    return Response({"message":"Złe zapytanie"},status=HTTP_400_BAD_REQUEST)
         recipe = get_object_or_404(Recipe, slug=slug)
         added_recipe, created = AddedRecipe.objects.get_or_create(
             recipe=recipe,
-            user=user
+            user=request.user
         )
-        list_qs = ShoppingList.objects.filter(user=user)
+        list_qs = ShoppingList.objects.filter(user=request.user)
         if list_qs:
             list = list_qs[0]
             if list.ingridients.filter(recipe__slug=recipe.slug).exists():
@@ -146,7 +141,7 @@ class AddToListView(APIView):
                 list.ingridients.add(added_recipe)
                 return Response(status=HTTP_200_OK)
         else:
-            list = ShoppingList.objects.create(user=user,
+            list = ShoppingList.objects.create(user=request.user,
                                                creation_date = timezone.now())
             #messages.info(request, "Przepis został dodany do listy zakupów")
             list.ingridients.add(added_recipe)
@@ -156,15 +151,14 @@ class AddToListView(APIView):
 class RemoveFromListView(APIView):
     def post(self, request, *args, **kwargs):
         slug = request.data.get("slug")
-        user = request.data.get("user")
         recipe = get_object_or_404(Recipe, slug=slug)
-        list_qs = ShoppingList.objects.filter(user=user)
+        list_qs = ShoppingList.objects.filter(user=request.user)
         if list_qs.exists():
             list = list_qs[0]
             if list.ingridients.filter(recipe__slug=recipe.slug).exists():
                 added_recipe = AddedRecipe.objects.filter(
                     recipe=recipe,
-                    user=user
+                    user=request.user
                 )[0]
                 if added_recipe.quantity > 1:
                     added_recipe.quantity -= 1
@@ -180,20 +174,44 @@ class RemoveFromListView(APIView):
         else:
             return Response({"message": "Nie posiadasz listy zakupów"}, status=HTTP_400_BAD_REQUEST)
 
-class ListDetailView(RetrieveAPIView):
+class ListDetailView(ListAPIView):
     serializer_class = ShoppingListSerializer
     permission_classes = (AllowAny, )
-    queryset = ShoppingList.objects.all()
 
-    def get_object(self):
+    def get_queryset(self):
         try:
-            list = ShoppingList.objects.get(user=self.request.user)
+            list = ShoppingList.objects.filter(user=self.request.user)
             return list
         except:
             return Response({"message": "Brak listy zakupów"}, status=HTTP_400_BAD_REQUEST)
+
 class FavouritesView(ListAPIView):
     serializer_class = FavouritesSerializer
-    queryset = Favourities.objects.all()
+    #queryset = Favourities.objects.all()
     permission_classes = (AllowAny, )
 
+    def get_queryset(self):
+        try:
+            favourites = Favourities.objects.filter(user=self.request.user)
+            #favourites = Favourities.objects.get(user=self.request.user)
+            return favourites
+        except:
+            return Response({"message": "Brak ulubionych"}, status=HTTP_400_BAD_REQUEST)
 
+
+class RemoveFromFavouritiesView(APIView):
+    def post(self, request, *args, **kwargs):
+        slug = request.data.get("slug")
+        recipe = get_object_or_404(Recipe, slug=slug)
+        favourities_qs = Favourities.objects.filter(user=request.user)
+        if favourities_qs.exists():
+            favourities = favourities_qs[0]
+            if favourities.recipes.filter(slug=recipe.slug).exists():
+                    favourities.recipes.remove(recipe)
+                    favourities.save()
+                    return Response({"message": "Odjęto przepis z ulubionych"}, status=HTTP_200_OK)
+            else:
+                return Response({"message": "Tego przepisu nie było na twoich ulubionych"}, status=HTTP_400_BAD_REQUEST)
+
+        else:
+            return Response({"message": "Nie posiadasz ulubionych"}, status=HTTP_400_BAD_REQUEST)
