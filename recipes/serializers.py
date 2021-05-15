@@ -50,4 +50,4 @@ class ShoppingListSerializer(serializers.ModelSerializer):
         )
 
     def get_ingridients(self, obj):
-        return AddedRecipeSerializer(obj.items.all(), many=True).data
+        return AddedRecipeSerializer(obj.ingridients.all(), many=True).data

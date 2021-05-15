@@ -1,4 +1,4 @@
-from .views2 import RecipeListView, AddToListView, ListDetailView, RemoveFromListView, AddToFavouritesView, RecipeDetailView, SendListView, MyRecipesView, FavouritesView
+from .views2 import RecipeListView, AddToListView, ListDetailView, RemoveFromListView, AddToFavouritesView, RecipeDetailView, SendListView, MyRecipesView, FavouritesView, RemoveFromFavouritiesView
 from django.urls import path
 
 urlpatterns = [
@@ -10,5 +10,6 @@ urlpatterns = [
     path("my-recipes/", MyRecipesView.as_view(), name="my-recipes"),
     path("recipe/<int:id>/", RecipeDetailView.as_view(), name="destroy-recipe"),
     path("send-list/", SendListView.as_view(), name="send-list"),
-    path("add-to-favourites/", AddToFavouritesView.as_view(), name="add-to-favourites")
+    path("add-to-favourites/", AddToFavouritesView.as_view(), name="add-to-favourites"),
+    path("remove-from-favourites/", RemoveFromFavouritiesView.as_view(), name="remove-from-favourites")
 ]
