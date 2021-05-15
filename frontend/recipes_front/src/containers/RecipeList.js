@@ -1,10 +1,7 @@
 import React from 'react'
 import axios from 'axios';
 import { Button, Container,Dimmer, Icon, Image, Item, Label, Loader, Message, Segment} from 'semantic-ui-react'
-
 import {recipeListURL} from '../constants'
-
-const paragraph = <Image src='/images/wireframe/short-paragraph.png' />
 
 class RecipeList extends React.Component{
 
@@ -19,11 +16,12 @@ class RecipeList extends React.Component{
         axios
           .get(recipeListURL)
           .then(res => {
+            console.log(res.data);
             this.setState({data: res.data, loading: false});
           })
           .catch(err => {
             this.setState({error: err, loading: false});
-          })
+          });
     }
 
     render(){
@@ -45,29 +43,30 @@ class RecipeList extends React.Component{
 
               <Image src='/images/recipes/spageto.jpg' />
             </Segment>
-          )}
-              <Item.Group divided>
-                <Item>
-                  <Item.Image src='/images/recipes/spageto.jpg' />
-
+            )}
+            <Item.Group divided>
+              {data.map(item => {
+                return <Item key = {item.id}>
+                  <Item.Image src={item.image} />
                   <Item.Content>
-                    <Item.Header as='a'>Spaghetti Bolognese</Item.Header>
+                    <Item.Header as='a'>{item.title}</Item.Header>
                     <Item.Meta>
-                      <span className='cinema'>Nie wiem co tu napisac</span>
+                      <span className='category'>{item.category}</span>
                     </Item.Meta>
-                    <Item.Description>{paragraph}</Item.Description>
+                    <Item.Description>{item.description}</Item.Description>
                     <Item.Extra>
                       <Button primary floated='right' icon labelPosition='right'>
                         Add to favourites!
                         <Icon name='heart' />
                       </Button>
-                      <Label>Vegan</Label>
+                      <Label>{item.label}}</Label>
                     </Item.Extra>
                   </Item.Content>
                 </Item>
+                })}
               </Item.Group>
-          </Container>
-        );
-    }
-}
+            </Container>
+          );
+      }
+  }
 export default RecipeList;

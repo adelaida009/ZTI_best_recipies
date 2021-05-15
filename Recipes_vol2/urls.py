@@ -23,6 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
     path("api/", include("recipes.urls2")),
+    path("my-recipes/", include("recipes.urls2")),
     path("", include("recipes.urls", namespace="recipes"))
 ]
 
