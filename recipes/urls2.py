@@ -11,5 +11,6 @@ urlpatterns = [
     path("recipe/<int:id>/", RecipeDetailView.as_view(), name="destroy-recipe"),
     path("send-list/", SendListView.as_view(), name="send-list"),
     path("add-to-favourites/", AddToFavouritesView.as_view(), name="add-to-favourites"),
-    path("remove-from-favourites/", RemoveFromFavouritiesView.as_view(), name="remove-from-favourites")
+    path("remove-from-favourites/", RemoveFromFavouritiesView.as_view(), name="remove-from-favourites"),
+    path("recipe-list/", RecipeListView.as_view(), name="recipe-list")
 ]

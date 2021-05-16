@@ -5,4 +5,4 @@ const apiURL = '/api'
 
 const endpoint = `${localhost}${apiURL}`
 
-export const recipeListURL = `${endpoint}/my-recipes`
+export const recipeListURL = `${endpoint}/recipe-list`
