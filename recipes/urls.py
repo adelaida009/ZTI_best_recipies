@@ -21,9 +21,11 @@ urlpatterns = [
     path("update-recipe/<slug>", update_recipe, name="update-recipe"),
     path("search-recipe/", search_recipe, name="search_recipe"),
     path("api/", include("recipes.urls2")),
+
+    path("rest-auth/", include("rest_auth.urls")),
+    path("rest-auth/registration/", include("rest_auth.registration.urls"))
+
     #path("api-auth/", include("rest_framework.urls")),
-    #path("rest-auth/", include("rest_auth.urls")),
-    #path("rest-auth/registration/", include("rest_auth.registration.urls")),
     #path("admin/", admin.site.urls)),
 ]
 

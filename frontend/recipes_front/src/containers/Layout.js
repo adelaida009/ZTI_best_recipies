@@ -113,11 +113,11 @@ class CustomLayout extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
+/*const mapStateToProps = state => {
   return {
     authenticated: state.auth.token !== null
   };
-};
+};*/
 
 const mapDispatchToProps = dispatch => {
   return {
@@ -127,7 +127,7 @@ const mapDispatchToProps = dispatch => {
 
 export default withRouter(
   connect(
-    mapStateToProps,
+    null,
     mapDispatchToProps
   )(CustomLayout)
 );
