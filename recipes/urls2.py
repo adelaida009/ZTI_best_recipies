@@ -1,4 +1,14 @@
-from .views2 import RecipeListView, AddToListView, ListDetailView, RemoveFromListView, AddToFavouritesView, RecipeDetailView, SendListView, MyRecipesView, FavouritesView, RemoveFromFavouritiesView
+from .views2 import (
+    RecipeListView,
+    AddToListView,
+    ListDetailView,
+    RemoveFromListView,
+    AddToFavouritesView,
+    RecipeDetailView,
+    SendListView,
+    MyRecipesView,
+    FavouritesView,
+    RemoveFromFavouritiesView)
 from django.urls import path
 
 urlpatterns = [

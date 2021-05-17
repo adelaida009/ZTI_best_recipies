@@ -1,7 +1,7 @@
 import React from "react"
 import axios from "axios";
 import { Button, Container, Dimmer, Icon, Image, Item, Label, Loader, Message, Segment} from "semantic-ui-react"
-import {recipeListURL} from "../constants"
+import {recipeListURL, addToFavouritesURL} from "../constants"
 
 class RecipeList extends React.Component{
   state = {
@@ -31,6 +31,18 @@ class RecipeList extends React.Component{
       /*.catch(err => {
        this.setState({error: err, loading: false});*/
 
+  handleAddtoFavourites = slug => {
+    this.setState({loading: true});
+    fetch(addToFavouritesURL, {
+      headers: {'Content-Type': 'application/json'},
+    }, {slug})
+      .then(res => res.json())
+      .then(res => {
+        console.log(res.results);
+        // update favourites count?
+        this.setState({loading: false});
+      })
+  };
 
   render(){
     const {data, error, loading} = this.state;
@@ -59,7 +71,7 @@ class RecipeList extends React.Component{
                 <Item.Header as="a">{item.title}</Item.Header>
                 <Item.Description>{item.description}</Item.Description>
                 <Item.Extra>
-                  <Button primary floated="right" icon labelPosition="right">
+                  <Button primary floated="right" icon labelPosition="right" onClick={() => this.handleAddtoFavourites(item.slug)}>
                     Add to favourites!
                     <Icon name="heart" />
                   </Button>

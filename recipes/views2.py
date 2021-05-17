@@ -7,7 +7,7 @@ from .serializers import RecipeSerializer, AddedRecipeSerializer, ShoppingListSe
 from rest_framework import filters
 from django_filters import AllValuesFilter, DateTimeFilter, NumberFilter
 from rest_framework.permissions import AllowAny
-from django.shortcuts import  get_object_or_404
+from django.shortcuts import  render, get_object_or_404
 from django.utils import timezone
 from .models import Recipe, AddedRecipe, ShoppingList, Favourities
 from django.core.mail import send_mail
@@ -104,6 +104,8 @@ class SendListView(APIView):
 class AddToFavouritesView(APIView):
     def post(self, request, *args, **kwargs):
         slug = request.data.get("slug", None)
+        if slug or user is None:
+            return Response({"message":"Złe zapytanie"},status=HTTP_400_BAD_REQUEST)
         recipe = get_object_or_404(Recipe, slug=slug)
         favourite_qs = Favourities.objects.filter(user=request.user)
         if favourite_qs:
@@ -121,8 +123,8 @@ class AddToFavouritesView(APIView):
 class AddToListView(APIView):
     def post(self, request, *args, **kwargs):
         slug = request.data.get("slug", None)
-        #if slug or user is None:
-        #    return Response({"message":"Złe zapytanie"},status=HTTP_400_BAD_REQUEST)
+        if slug or user is None:
+            return Response({"message":"Złe zapytanie"},status=HTTP_400_BAD_REQUEST)
         recipe = get_object_or_404(Recipe, slug=slug)
         added_recipe, created = AddedRecipe.objects.get_or_create(
             recipe=recipe,
