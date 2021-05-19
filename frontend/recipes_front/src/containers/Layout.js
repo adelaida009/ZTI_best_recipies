@@ -59,8 +59,6 @@ class CustomLayout extends React.Component {
                 <List link inverted>
                   <List.Item as="a">Link One</List.Item>
                   <List.Item as="a">Link Two</List.Item>
-                  <List.Item as="a">Link Three</List.Item>
-                  <List.Item as="a">Link Four</List.Item>
                 </List>
               </Grid.Column>
               <Grid.Column width={3}>
@@ -68,8 +66,6 @@ class CustomLayout extends React.Component {
                 <List link inverted>
                   <List.Item as="a">Link One</List.Item>
                   <List.Item as="a">Link Two</List.Item>
-                  <List.Item as="a">Link Three</List.Item>
-                  <List.Item as="a">Link Four</List.Item>
                 </List>
               </Grid.Column>
               <Grid.Column width={3}>
@@ -77,8 +73,6 @@ class CustomLayout extends React.Component {
                 <List link inverted>
                   <List.Item as="a">Link One</List.Item>
                   <List.Item as="a">Link Two</List.Item>
-                  <List.Item as="a">Link Three</List.Item>
-                  <List.Item as="a">Link Four</List.Item>
                 </List>
               </Grid.Column>
               <Grid.Column width={7}>
