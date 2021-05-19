@@ -64,46 +64,18 @@ class RegistrationForm extends React.Component {
 
         <Form.Item name = 'userName' rules={[{ required: true, message: 'Please input your username!' }]}>
             <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Username" />
-          )}
         </Form.Item>
-        //WSZYSTKO TRZEBA PRZEPISAC W TEN SAM SPOSOB!!!
-{/*
-        <Form.Item>
-          {getFieldDecorator('email', {
-            rules: [{
-              type: 'email', message: 'The input is not valid E-mail!',
-            }, {
-              required: true, message: 'Please input your E-mail!',
-            }],
-          })(
+
+        <Form.Item name ='email' rules = {[{ type: 'email', message: 'The input is not valid E-mail!' }]}>
             <Input prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Email" />
-          )}
         </Form.Item>
 
-        <Form.Item>
-          {getFieldDecorator('password', {
-            rules: [{
-              required: true, message: 'Please input your password!',
-            }, {
-              validator: this.validateToNextPassword,
-            }],
-          })(
+        <Form.Item name = 'password' rules = {[{ required: true, message: 'Please input your password!', validator: this.validateToNextPassword}]}>
             <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Password" />
-          )}
         </Form.Item>
-
-        <Form.Item>
-          {getFieldDecorator('confirm', {
-            rules: [{
-              required: true, message: 'Please confirm your password!',
-            }, {
-              validator: this.compareToFirstPassword,
-            }],
-          })(
+        <Form.Item name = 'confirm' rules = {[{required: true, message: 'Please confirm your password!', validator: this.compareToFirstPassword}]}>
             <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Password" onBlur={this.handleConfirmBlur} />
-          )}
-        </Form.Item>*/}
-
+        </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit" style={{marginRight: '10px'}}>
             Signup
@@ -113,8 +85,7 @@ class RegistrationForm extends React.Component {
             style={{marginRight: '10px'}}
             to='/login/'> login
           </NavLink>
-        </Form.Item>*/
-
+        </Form.Item>
       </Form>
     );
   }
