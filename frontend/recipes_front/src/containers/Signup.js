@@ -1,7 +1,7 @@
 import React from "react";
 import {
   Button,
-  //Form,
+  Form,
   Grid,
   Header,
   Message,
@@ -10,11 +10,11 @@ import {
 import { connect } from "react-redux";
 import { NavLink, Redirect } from "react-router-dom";
 import { authSignup } from "../store/actions/auth";
-import {Form, Input} from "antd";
+import {Input} from "antd";
 import { Icon } from '@ant-design/compatible';
 import 'antd/dist/antd.css';
 
-const FormItem = Form.Item;
+//Const FormItem = Form.Item;
 
 class RegistrationForm extends React.Component {
   state = {
@@ -27,19 +27,19 @@ class RegistrationForm extends React.Component {
   handleSubmit = e => {
     e.preventDefault();
     const { username, email, password1, password2 } = this.state;
-    this.props.signup(username, email, password1, password2);
-  };
+    this.props.onAuth(username, email, password1, password2);
+    }
 
   handleChange = e => {
     this.setState({ [e.target.name]: e.target.value });
-  };
-
-  handleConfirmBlur = e => {
-    const value = e.target.value;
-    this.setState({ confirmDirty: this.state.confirmDirty || !!value });
   }
 
-  compareToFirstPassword = (rule, value, callback) => {
+/*  handleConfirmBlur = e => {
+    const value = e.target.value;
+    this.setState({ confirmDirty: this.state.confirmDirty || !!value });
+  }*/
+
+/*  compareToFirstPassword = (rule, value, callback) => {
     const form = this.props.form;
     if (value && value !== form.getFieldValue('password')) {
       callback('Two passwords that you enter is inconsistent!');
@@ -54,11 +54,15 @@ class RegistrationForm extends React.Component {
       form.validateFields(['confirm'], { force: true });
     }
     callback();
-  }
+  }*/
 
-  render() {
+/*  render() {
     //const { getFieldDecorator } = this.props.form;
-
+    const { username, email, password1, password2 } = this.state;
+    const { error, loading, token } = this.props;
+    if (token) {
+      return <Redirect to="/" />;
+    }
     return (
       <Form onSubmit={this.handleSubmit}>
 
@@ -69,12 +73,13 @@ class RegistrationForm extends React.Component {
         <Form.Item name ='email' rules = {[{ type: 'email', message: 'The input is not valid E-mail!' }]}>
             <Input prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Email" />
         </Form.Item>
-
-        <Form.Item name = 'password' rules = {[{ required: true, message: 'Please input your password!', validator: this.validateToNextPassword}]}>
-            <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Password" />
+        {/!*, validator: this.validateToNextPassword*!/}
+        <Form.Item name = 'password1' rules = {[{ required: true, message: 'Please input your password!'}]}>
+            <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password1" placeholder="Password" onBlur={this.handleConfirmBlur} />
         </Form.Item>
-        <Form.Item name = 'confirm' rules = {[{required: true, message: 'Please confirm your password!', validator: this.compareToFirstPassword}]}>
-            <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Password" onBlur={this.handleConfirmBlur} />
+        {/!*, validator: this.compareToFirstPassword*!/}
+        <Form.Item name = 'password2' rules = {[{required: true, message: 'Please confirm your password!'}]}>
+            <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password2" placeholder="Password" onBlur={this.handleConfirmBlur} />
         </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit" style={{marginRight: '10px'}}>
@@ -88,10 +93,7 @@ class RegistrationForm extends React.Component {
         </Form.Item>
       </Form>
     );
-  }
-}
-
-/*
+  }*/
 
   render() {
     const { username, email, password1, password2 } = this.state;
@@ -173,8 +175,6 @@ class RegistrationForm extends React.Component {
     );
   }
 }
-*/
-
 
 const mapStateToProps = state => {
   return {
@@ -186,7 +186,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    signup: (username, email, password1, password2) =>
+    onAuth: (username, email, password1, password2) =>
       dispatch(authSignup(username, email, password1, password2))
   };
 };

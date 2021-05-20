@@ -10,7 +10,10 @@ import {
 import { connect } from "react-redux";
 import { NavLink, Redirect } from "react-router-dom";
 import { authLogin } from "../store/actions/auth";
+import {Input} from "antd";
+import {Icon} from "@ant-design/compatible";
 
+//const FormItem = Form.Item;
 class LoginForm extends React.Component {
   state = {
     username: "",
@@ -48,7 +51,7 @@ class LoginForm extends React.Component {
           <React.Fragment>
             <Form size="large" onSubmit={this.handleSubmit}>
               <Segment stacked>
-                <Form.Input
+               <Form.Input
                   onChange={this.handleChange}
                   value={username}
                   name="username"

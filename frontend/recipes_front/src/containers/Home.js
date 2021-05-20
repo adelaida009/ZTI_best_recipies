@@ -87,26 +87,57 @@ ResponsiveContainer.propTypes = {
   children: PropTypes.node
 };
 
-const HomepageLayout = () => (
-  <ResponsiveContainer>
-    <Segment style={{ padding: "2em 0em" }} vertical>
-      <Container text>
-        <Header as="h3" style={{ fontSize: "2em" }}>
-          Don't have an account yet?
-        </Header>
-        <p style={{ fontSize: "1.33em" }}>
-          Click the below link!
-        </p>
-        <Link to="/signup" className="btn btn-primary">Sign up</Link>
-        <Header as="h3" style={{ fontSize: "2em" }}>
-          Already signed up?
-        </Header>
-        <p style={{ fontSize: "1.33em" }}>
-          Login!
-        </p>
-        <Link to="/login" className="btn btn-primary">Login</Link>
-      </Container>
-    </Segment>
-  </ResponsiveContainer>
-);
+class HomepageLayout extends Component {
+  render() {
+    const { authenticated } = this.props;
+    return(
+        <Menu inverted>
+          <Container>
+            <Link to="/">
+              <Menu.Item header>Home</Menu.Item>
+            </Link>
+            {
+              this.props.isAuthenticated ? (
+                <React.Fragment>
+                  <ResponsiveContainer>
+                    <Segment style={{ padding: "2em 0em" }} vertical>
+                      <Container text>
+                        <Header as="h3" style={{ fontSize: "2em" }}>
+                          Go to all recipes!
+                        </Header>
+                        <Link to="/recipes" className="btn btn-primary">Recipes</Link>
+                      </Container>
+                    </Segment>
+                  </ResponsiveContainer>
+                </React.Fragment>
+              ) : (
+                <React.Fragment>
+                  <ResponsiveContainer>
+                    <Segment style={{ padding: "2em 0em" }} vertical>
+                      <Container text>
+                        <Header as="h3" style={{ fontSize: "2em" }}>
+                          Don't have an account yet?
+                        </Header>
+                        <p style={{ fontSize: "1.33em" }}>
+                          Click the below link!
+                        </p>
+                        <Link to="/signup" className="btn btn-primary">Sign up</Link>
+                        <Header as="h3" style={{ fontSize: "2em" }}>
+                          Already signed up?
+                        </Header>
+                        <p style={{ fontSize: "1.33em" }}>
+                          Login!
+                        </p>
+                        <Link to="/login" className="btn btn-primary">Login</Link>
+                      </Container>
+                    </Segment>
+                  </ResponsiveContainer>
+                </React.Fragment>
+              )}
+          </Container>
+        </Menu>
+    );
+  }
+}
+
 export default HomepageLayout;

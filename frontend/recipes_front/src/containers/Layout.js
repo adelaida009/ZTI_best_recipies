@@ -13,6 +13,7 @@ import {
 import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { logout } from "../store/actions/auth";
+import register from "../registerServiceWorker";
 
 class CustomLayout extends React.Component {
   render() {
@@ -107,21 +108,21 @@ class CustomLayout extends React.Component {
   }
 }
 
-/*const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     authenticated: state.auth.token !== null
-  };
-};*/
+  }
+}
 
 const mapDispatchToProps = dispatch => {
   return {
     logout: () => dispatch(logout())
-  };
-};
+  }
+}
 
 export default withRouter(
   connect(
-    null,
+    mapStateToProps,
     mapDispatchToProps
   )(CustomLayout)
 );

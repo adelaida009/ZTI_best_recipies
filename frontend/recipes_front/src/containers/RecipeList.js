@@ -1,7 +1,9 @@
 import React from "react"
 import axios from "axios";
 import { Button, Container, Dimmer, Icon, Image, Item, Label, Loader, Message, Segment} from "semantic-ui-react"
-import {recipeListURL, addToFavouritesURL} from "../constants"
+import {recipeListURL, addToFavouritesURL, endpoint} from "../constants"
+//import {authAxios} from "../utils";
+//import {authFetch} from "../utils";
 
 class RecipeList extends React.Component{
   state = {
@@ -21,26 +23,19 @@ class RecipeList extends React.Component{
         this.setState({data: res.results, loading: false});
       })
   };
-  /*
-    axios
-      .get(recipeListURL)
-      .then(res => {
-        console.log(res.data);
-        this.setState({data: res.data, loading: false});
-      })*/
-      /*.catch(err => {
-       this.setState({error: err, loading: false});*/
 
   handleAddtoFavourites = slug => {
     this.setState({loading: true});
-    fetch(addToFavouritesURL, {
-      headers: {'Content-Type': 'application/json'},
+    fetch(addToFavouritesURL, {method: 'POST',
+      Authorization: `Token ${localStorage.getItem('token')}`
     }, {slug})
       .then(res => res.json())
       .then(res => {
         console.log(res.results);
-        // update favourites count?
-        this.setState({loading: false});
+        this.setState({data: res.results, loading: false});
+      })
+      .catch(err => {
+        this.setState({error: err, loading: false});
       })
   };
 
