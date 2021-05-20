@@ -104,8 +104,6 @@ class SendListView(APIView):
 class AddToFavouritesView(APIView):
     def post(self, request, *args, **kwargs):
         slug = request.data.get("slug", None)
-        if slug or user is None:
-            return Response({"message":"Złe zapytanie"},status=HTTP_400_BAD_REQUEST)
         recipe = get_object_or_404(Recipe, slug=slug)
         favourite_qs = Favourities.objects.filter(user=request.user)
         if favourite_qs:
@@ -123,8 +121,6 @@ class AddToFavouritesView(APIView):
 class AddToListView(APIView):
     def post(self, request, *args, **kwargs):
         slug = request.data.get("slug", None)
-        if slug or user is None:
-            return Response({"message":"Złe zapytanie"},status=HTTP_400_BAD_REQUEST)
         recipe = get_object_or_404(Recipe, slug=slug)
         added_recipe, created = AddedRecipe.objects.get_or_create(
             recipe=recipe,
@@ -134,18 +130,15 @@ class AddToListView(APIView):
         if list_qs:
             list = list_qs[0]
             if list.ingridients.filter(recipe__slug=recipe.slug).exists():
-                #messages.info(request, "Przepis został oddany do listy zakupów")
                 added_recipe.quantity += 1
                 added_recipe.save()
                 return Response(status=HTTP_200_OK)
             else:
-                #messages.info(request, "Przepis został oddany do listy zakupów")
                 list.ingridients.add(added_recipe)
                 return Response(status=HTTP_200_OK)
         else:
             list = ShoppingList.objects.create(user=request.user,
                                                creation_date = timezone.now())
-            #messages.info(request, "Przepis został dodany do listy zakupów")
             list.ingridients.add(added_recipe)
         return Response(status=HTTP_200_OK)
 

@@ -17,25 +17,23 @@ class RecipeList extends React.Component{
     fetch('http://127.0.0.1:8000/api/recipe-list/', {
       headers: {'Content-Type': 'application/json'},
     })
-      .then(res => res.json())
-      .then(res => {
-        console.log(res.results);
-        this.setState({data: res.results, loading: false});
+      .then(res2 => res2.json())
+      .then(res2 => {
+        console.log(res2.results);
+        this.setState({data: res2.results, loading: false});
       })
   };
 
   handleAddtoFavourites = slug => {
+    const whatever = {Authorization: `Token `+ localStorage.getItem('token')};
     this.setState({loading: true});
-    fetch(addToFavouritesURL, {method: 'POST',
-      Authorization: `Token ${localStorage.getItem('token')}`
-    }, {slug})
+    console.log(slug);
+    fetch(addToFavouritesURL, {method: 'POST', headers: whatever, body: JSON.stringify({"slug":slug})
+    })
       .then(res => res.json())
       .then(res => {
         console.log(res.results);
-        this.setState({data: res.results, loading: false});
-      })
-      .catch(err => {
-        this.setState({error: err, loading: false});
+        //this.setState({data: res.results, loading: false});
       })
   };
 
@@ -70,7 +68,7 @@ class RecipeList extends React.Component{
                     Add to favourites!
                     <Icon name="heart" />
                   </Button>
-                  <Label>{item.ingredients}</Label>
+                  <Label>{item.slug}</Label>
                 </Item.Extra>
               </Item.Content>
             </Item>
