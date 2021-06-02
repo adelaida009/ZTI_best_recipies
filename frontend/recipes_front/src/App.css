@@ -1,10 +1,34 @@
-body{
-    font-family: ‘Changa’, sans-serif;
-    height: 93vh;
-    background: linear-gradient(90deg, rgba(225,224,237,1) 0%, rgba(122,194,191,1) 42%, rgba(0,212,255,1) 96%);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    color: #ffffff !important;
+body {
+  font-family: ‘Changa’, sans-serif;
+  height: 93vh;
+  background: linear-gradient(
+    90deg,
+    rgba(225, 224, 237, 1) 0%,
+    rgba(122, 194, 191, 1) 42%,
+    rgba(0, 212, 255, 1) 96%
+  );
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: #ffffff !important;
+}
+
+.receipe-details__content {
+  color: #000000;
+}
+
+.receipe-details__header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.receipe-details__content--ingredients {
+  padding: 15px;
+}
+
+.receipe-details__content--image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

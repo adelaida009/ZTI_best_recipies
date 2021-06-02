@@ -1,22 +1,35 @@
 import axios from "axios";
 import * as actionTypes from "./actionTypes";
 
-export const authStart = () => {
+export const fetchFavouritesStart = () => {
   return {
-    type: actionTypes.AUTH_START
+    type: actionTypes.FETCH_FAVOURITES_START,
   };
 };
 
-export const authSuccess = token => {
+export const fetchFavouritesSuccess = (favourites) => {
   return {
-    type: actionTypes.AUTH_SUCCESS,
-    token: token
+    type: actionTypes.FETCH_FAVOURITES_SUCCESS,
+    favourites,
   };
 };
 
-export const authFail = error => {
+export const fetchFavouritesFail = (error) => {
   return {
-    type: actionTypes.AUTH_FAIL,
-    error: error
+    type: actionTypes.FETCH_FAVOURITES_FAIL,
+    error: error,
+  };
+};
+
+export const fetchFavourites = () => {
+  return (dispatch) => {
+    dispatch(fetchFavouritesStart());
+    axios
+      .get("http://127.0.0.1:8000/api/favourites")
+      .then((response) => {
+        const favourites = response.data.results;
+        dispatch(fetchFavouritesSuccess(favourites));
+      })
+      .catch((error) => dispatch(fetchFavouritesFail(error)));
   };
 };

@@ -2,47 +2,59 @@ import React from "react";
 import {
   Container,
   Divider,
-  Dropdown,
   Grid,
   Header,
   Image,
   List,
   Menu,
-  Segment
+  Segment,
 } from "semantic-ui-react";
-import { Link, withRouter } from "react-router-dom";
-import { connect } from "react-redux";
-import { logout } from "../store/actions/auth";
-import register from "../registerServiceWorker";
+import { Link } from "react-router-dom";
 
 class CustomLayout extends React.Component {
   render() {
-    const { authenticated } = this.props;
+    const { isAuthenticated } = this.props;
+
     return (
       <div>
         <Menu inverted>
-          <Container>
-            <Link to="/">
-              <Menu.Item header>Home</Menu.Item>
-            </Link>
-            {
-              this.props.isAuthenticated ? (
-              <Menu.Item header onClick={() => this.props.logout()}>
-                Logout
-              </Menu.Item>
-            ) : (
-              <React.Fragment>
-                <Link to="/login">
-                  <Menu.Item header>Login</Menu.Item>
-                </Link>
-                <Link to="/signup">
-                  <Menu.Item header>Signup</Menu.Item>
-                </Link>
-              </React.Fragment>
-            )}
-            <Link to="/recipes">
-              <Menu.Item header>Recipes</Menu.Item>
-            </Link>
+          <Container style={{ justifyContent: "space-between" }}>
+            <div style={{ display: "flex" }}>
+              <Link to="/">
+                <Menu.Item header>Home</Menu.Item>
+              </Link>
+              <Link to="/recipes">
+                <Menu.Item header>Recipes</Menu.Item>
+              </Link>
+              {isAuthenticated ? (
+                <React.Fragment>
+                  <Link to="/favourites">
+                    <Menu.Item header>Favourites</Menu.Item>
+                  </Link>
+                  <Link to="/shopping-list">
+                    <Menu.Item header>Shopping list</Menu.Item>
+                  </Link>
+                </React.Fragment>
+              ) : (
+                <div />
+              )}
+            </div>
+            <div style={{ display: "flex" }}>
+              {isAuthenticated ? (
+                <Menu.Item header onClick={() => this.props.logout()}>
+                  Logout
+                </Menu.Item>
+              ) : (
+                <React.Fragment>
+                  <Link to="/login">
+                    <Menu.Item header>Login</Menu.Item>
+                  </Link>
+                  <Link to="/signup">
+                    <Menu.Item header>Signup</Menu.Item>
+                  </Link>
+                </React.Fragment>
+              )}
+            </div>
           </Container>
         </Menu>
 
@@ -108,21 +120,4 @@ class CustomLayout extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    authenticated: state.auth.token !== null
-  }
-}
-
-const mapDispatchToProps = dispatch => {
-  return {
-    logout: () => dispatch(logout())
-  }
-}
-
-export default withRouter(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(CustomLayout)
-);
+export default CustomLayout;
