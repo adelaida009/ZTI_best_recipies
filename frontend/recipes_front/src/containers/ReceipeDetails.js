@@ -17,30 +17,17 @@ class ReceipeDetails extends React.Component {
     super(props);
     this.state = {
       loading: false,
-      data: undefined,
+      data: props.location.state.recipe,
       ...props,
     };
     this.props.reloadFavourites();
     this.props.reloadShoppingList();
   }
 
-  componentDidMount() {
-    this.setState({ loading: true });
-    //TODO -> CLEAR
-    //TODO -> dorobią endpoint do pobierania, czy jak to przesyłać chce??
-    // fetch('http://127.0.0.1:8000/api/recipe-list/', {
-    //   headers: {'Content-Type': 'application/json'},
-    // })
-    //   .then(res2 => res2.json())
-    //   .then(res2 => {
-    //     console.log(res2.results);
-    //     this.setState({data: res2.results, loading: false});
-    //   })
-  }
-
   handleAddtoFavourites = (slug) => {
     const whatever = {
       Authorization: `Token ` + localStorage.getItem("token"),
+      "Content-Type": "application/json",
     };
     this.setState({ loading: true });
     fetch(addToFavouritesURL, {
@@ -58,6 +45,7 @@ class ReceipeDetails extends React.Component {
   handleDeleteFromFavourites = (slug) => {
     const whatever = {
       Authorization: `Token ` + localStorage.getItem("token"),
+      "Content-Type": "application/json",
     };
     this.setState({ loading: true });
     fetch(deleteFromFavouritesURL, {
@@ -72,6 +60,7 @@ class ReceipeDetails extends React.Component {
   handleAddtoShoppingList = (slug) => {
     const whatever = {
       Authorization: `Token ` + localStorage.getItem("token"),
+      "Content-Type": "application/json",
     };
     this.setState({ loading: true });
     fetch(addToShoppingListURL, {
@@ -86,6 +75,7 @@ class ReceipeDetails extends React.Component {
   handleDeleteFromShoppingList = (slug) => {
     const whatever = {
       Authorization: `Token ` + localStorage.getItem("token"),
+      "Content-Type": "application/json",
     };
     this.setState({ loading: true });
     fetch(deleteFromShoppingListURL, {
@@ -186,11 +176,7 @@ class ReceipeDetails extends React.Component {
             </Col>
             <Col span={12}>
               <div className="receipe-details__header--buttons">
-                {this.state.isAuthenticated ? (
-                  this.renderFavouritesButton()
-                ) : (
-                  <div />
-                )}
+                {this.renderFavouritesButton()}
                 {this.renderShoppingListButtons()}
               </div>
             </Col>

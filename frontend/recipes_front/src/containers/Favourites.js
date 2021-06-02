@@ -25,7 +25,7 @@ class FavouritesLayout extends React.Component {
   }
   componentDidMount() {
     this.setState({ loading: true });
-    fetch("http://127.0.0.1:8000/api/favourites-list/", {
+    fetch("http://127.0.0.1:8000/api/favourites/", {
       headers: { "Content-Type": "application/json" },
     })
       .then((res2) => res2.json())
