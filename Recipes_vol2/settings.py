@@ -67,6 +67,18 @@ MIDDLEWARE = [
 ]
 CORS_ORIGIN_ALLOW_ALL = True
 
+CORS_ORIGIN_WHITELIST = [
+    'http://127.0.0.1:8000',
+    'http://127.0.0.1:9000',
+    'http://localhost:3000'
+]
+
+CORS_ORIGIN_REGEX_WHITELIST = [
+    'http://127.0.0.1:8000',
+    'http://127.0.0.1:9000',
+    'http://localhost:3000'
+]
+
 ROOT_URLCONF = 'Recipes_vol2.urls'
 
 SETTINGS_PATH = os.path.dirname(os.path.dirname(__file__))
