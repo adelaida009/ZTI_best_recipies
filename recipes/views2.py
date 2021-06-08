@@ -99,6 +99,7 @@ class SendListView(APIView):
         #list.detele()
         #AddedRecipe.objects.filter(user=request.user).delete()
         print(message)
+        #return Response({"message" : f"{request.user}"}, status=HTTP_200_OK)
         return Response({"message" : "Lista została wysłana"}, status=HTTP_200_OK)
 
 class AddToFavouritesView(APIView):
