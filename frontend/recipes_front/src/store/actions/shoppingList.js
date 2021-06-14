@@ -28,6 +28,25 @@ export const fetchShoppingList = () => {
       .get("http://127.0.0.1:8000/api/list-summary")
       .then((response) => {
         const shoppingList = response.data.results;
+        // const shoppingList = [
+        //   {
+        //     id: 1,
+        //     ingredients: [
+        //       {
+        //         id: 12,
+        //         quantity: 1,
+        //         name: "pomidory",
+        //         recipe: "#1 recipe",
+        //       },
+        //       {
+        //         id: 13,
+        //         quantity: 2,
+        //         name: "oliwki",
+        //         recipe: "#1 recipe",
+        //       },
+        //     ],
+        //   },
+        // ];
 
         dispatch(fetchShoppingListSuccess(shoppingList));
       })

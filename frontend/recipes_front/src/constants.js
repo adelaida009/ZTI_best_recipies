@@ -10,3 +10,4 @@ export const deleteFromFavouritesURL = `${endpoint}/remove-from-favourites/`;
 export const addToShoppingListURL = `${endpoint}/add-to-list`;
 export const deleteFromShoppingListURL = `${endpoint}/remove-from-list`;
 export const sendShoppingList = `${endpoint}/send-list`;
+export const addNewRecipe = `${endpoint}/api`;

@@ -9,6 +9,7 @@ import RecipeList from "./containers/RecipeList";
 import FavouritesLayout from "./containers/Favourites";
 import ReceipeDetails from "./containers/ReceipeDetails";
 import ShoppingList from "./containers/ShoppingList";
+import AddRecipeLayout from "./containers/AddRecipeLayout";
 
 const BaseRouter = (props) => {
   const { isAuthenticated } = props;
@@ -55,6 +56,13 @@ const BaseRouter = (props) => {
         render={(props) => {
           const extendedProps = Object.assign({}, props, { isAuthenticated });
           return <FavouritesLayout {...extendedProps} />;
+        }}
+      />
+      <Route
+        path="/add-recipe"
+        render={(props) => {
+          const extendedProps = Object.assign({}, props, { isAuthenticated });
+          return <AddRecipeLayout {...extendedProps} />;
         }}
       />
     </Hoc>

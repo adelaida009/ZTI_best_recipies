@@ -222,6 +222,41 @@ const mapStateToProps = (state) => {
     favourites: state.favourites.favourites,
     shoppingList: state.shoppingList.shoppingList,
   };
+
+  // return {
+  //   favourites: [
+  //     {
+  //       id: 1,
+  //       title: "#1 recipe",
+  //       photo: "https://media.giphy.com/media/oS2lkrdaq3a3m/giphy.gif",
+  //       description: "Example recipe #1",
+  //       ingredients: '{"makaron": 1, "pomidor": 2}',
+  //       created: "2021-04-03T13:12:42.377000Z",
+  //       created_by: 1,
+  //       slug: "recipe-1",
+  //       tags: "obiad, makaron",
+  //     },
+  //   ],
+  //   shoppingList: [
+  //     {
+  //       id: 1,
+  //       ingredients: [
+  //         {
+  //           id: 12,
+  //           quantity: 1,
+  //           name: "pomidory",
+  //           recipe: "#1 recipe",
+  //         },
+  //         {
+  //           id: 13,
+  //           quantity: 2,
+  //           name: "oliwki",
+  //           recipe: "#1 recipe",
+  //         },
+  //       ],
+  //     },
+  //   ],
+  // };
 };
 
 const mapDispatchToProps = (dispatch) => {

@@ -12,6 +12,9 @@ import {
   Segment,
 } from "semantic-ui-react";
 import { Redirect } from "react-router-dom";
+import { deleteFromFavouritesURL } from "../constants";
+import { Link } from "react-router-dom";
+
 class FavouritesLayout extends React.Component {
   constructor(props) {
     super(props);
@@ -33,7 +36,54 @@ class FavouritesLayout extends React.Component {
         console.log(res2.results);
         this.setState({ data: res2.results, loading: false });
       });
+
+    // this.setState({
+    //   data: [
+    //     {
+    //       id: 1,
+    //       title: "#1 recipe fav",
+    //       photo: "no-photo",
+    //       description: "Example recipe #1",
+    //       ingredients: '{"makaron": 1, "pomidor": 2}',
+    //       created: "2021-04-03T13:12:42.377000Z",
+    //       created_by: 1,
+    //       slug: "recipe-1",
+    //       tags: "obiad, makaron",
+    //     },
+    //     {
+    //       id: 2,
+    //       title: "#2 recipe fav",
+    //       photo: "no-photo",
+    //       description: "Example recipe #2",
+    //       ingredients: '{"cebula": 1, "kurak": 2}',
+    //       created: "2021-04-03T13:12:42.377000Z",
+    //       created_by: 1,
+    //       slug: "recipe-2",
+    //       tags: "zupa",
+    //     },
+    //   ],
+    //   loading: false,
+    // });
   }
+
+  handleDeleteFromFavourites = (slug) => {
+    const whatever = {
+      Authorization: `Token ` + localStorage.getItem("token"),
+      "Content-Type": "application/json",
+    };
+    this.setState({ loading: true });
+    fetch(deleteFromFavouritesURL, {
+      method: "POST",
+      headers: whatever,
+      body: JSON.stringify({ slug: slug }),
+    }).then((res) => {
+      this.props.reloadFavourites();
+    });
+
+    // this.setState({
+    //   data: this.state.data.filter((recipe) => recipe.slug !== slug),
+    // });
+  };
 
   render() {
     const { data, error, loading, isAuthenticated } = this.state;
@@ -68,7 +118,16 @@ class FavouritesLayout extends React.Component {
               <Item key={item.id}>
                 <Item.Image src={item.image} />
                 <Item.Content>
-                  <Item.Header as="a">{item.title}</Item.Header>
+                  <Item.Header>
+                    <Link
+                      to={{
+                        pathname: `/receipes/${item.id}`,
+                        state: { recipe: item },
+                      }}
+                    >
+                      {item.title}
+                    </Link>
+                  </Item.Header>
                   <Item.Description>{item.description}</Item.Description>
                   <Item.Extra>
                     <Button
@@ -76,9 +135,9 @@ class FavouritesLayout extends React.Component {
                       floated="right"
                       icon
                       labelPosition="right"
-                      onClick={() => this.handleAddtoFavourites(item.slug)}
+                      onClick={() => this.handleDeleteFromFavourites(item.slug)}
                     >
-                      Add to favourites!
+                      Delete from favourites!
                       <Icon name="heart" />
                     </Button>
                     <Label>{item.slug}</Label>

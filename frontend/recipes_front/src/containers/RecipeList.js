@@ -1,18 +1,6 @@
 import React from "react";
-import axios from "axios";
-import {
-  Button,
-  Container,
-  Dimmer,
-  Icon,
-  Image,
-  Item,
-  Label,
-  Loader,
-  Message,
-  Segment,
-} from "semantic-ui-react";
-import { recipeListURL, addToFavouritesURL, endpoint } from "../constants";
+import { Container, Item, Message } from "semantic-ui-react";
+import { addToFavouritesURL } from "../constants";
 import { Link } from "react-router-dom";
 //import {authAxios} from "../utils";
 //import {authFetch} from "../utils";
@@ -30,40 +18,41 @@ class RecipeList extends React.Component {
 
   componentDidMount() {
     this.setState({ loading: true });
-    // fetch("http://127.0.0.1:8000/api/recipe-list/", {
-    //   headers: { "Content-Type": "application/json" },
-    // })
-    //   .then((res2) => res2.json())
-    //   .then((res2) => {
-    //     console.log(res2.results);
-    //     this.setState({ data: res2.results, loading: false });
-    //   });
-    this.setState({
-      data: [
-        {
-          id: 1,
-          title: "#1 recipe",
-          photo: "no-photo",
-          description: "Example recipe #1",
-          ingredients: '{"makaron": 1, "pomidor": 2}',
-          created: "2021-04-03T13:12:42.377000Z",
-          created_by: 1,
-          slug: "recipe-1",
-          tags: "obiad, makaron",
-        },
-        {
-          id: 2,
-          title: "#2 recipe",
-          photo: "no-photo",
-          description: "Example recipe #2",
-          ingredients: '{"cebula": 1, "kurak": 2}',
-          created: "2021-04-03T13:12:42.377000Z",
-          created_by: 1,
-          slug: "recipe-2",
-          tags: "zupa",
-        },
-      ],
-    });
+    fetch("http://127.0.0.1:8000/api/recipe-list/", {
+      headers: { "Content-Type": "application/json" },
+    })
+      .then((res2) => res2.json())
+      .then((res2) => {
+        console.log(res2.results);
+        this.setState({ data: res2.results, loading: false });
+      });
+
+    // this.setState({
+    //   data: [
+    //     {
+    //       id: 1,
+    //       title: "#1 recipe",
+    //       photo: "no-photo",
+    //       description: "Example recipe #1",
+    //       ingredients: '{"makaron": 1, "pomidor": 2}',
+    //       created: "2021-04-03T13:12:42.377000Z",
+    //       created_by: 1,
+    //       slug: "recipe-1",
+    //       tags: "obiad, makaron",
+    //     },
+    //     {
+    //       id: 2,
+    //       title: "#2 recipe",
+    //       photo: "no-photo",
+    //       description: "Example recipe #2",
+    //       ingredients: '{"cebula": 1, "kurak": 2}',
+    //       created: "2021-04-03T13:12:42.377000Z",
+    //       created_by: 1,
+    //       slug: "recipe-2",
+    //       tags: "zupa",
+    //     },
+    //   ],
+    // });
   }
 
   handleAddtoFavourites = (slug) => {
