@@ -34,7 +34,7 @@ class FavouritesLayout extends React.Component {
       .then((res2) => res2.json())
       .then((res2) => {
         console.log(res2.results);
-        this.setState({ data: res2.results, loading: false });
+        this.setState({ data: res2.results[0].recipes, loading: false });
       });
 
     // this.setState({
@@ -77,7 +77,15 @@ class FavouritesLayout extends React.Component {
       headers: whatever,
       body: JSON.stringify({ slug: slug }),
     }).then((res) => {
-      this.props.reloadFavourites();
+        this.setState({ loading: true });
+            fetch("http://127.0.0.1:8000/api/favourites/", {
+              headers: { "Content-Type": "application/json" },
+            })
+              .then((res2) => res2.json())
+              .then((res2) => {
+                console.log(res2.results);
+                this.setState({ data: res2.results[0].recipes, loading: false });
+              });
     });
 
     // this.setState({

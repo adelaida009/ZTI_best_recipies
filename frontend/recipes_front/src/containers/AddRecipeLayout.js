@@ -45,7 +45,8 @@ class AddRecipeLayout extends React.Component {
     const body = {
       title: values.title,
       description: values.description,
-      created_by: "23",
+      created_by: "1",
+      photo: "no_photo",
       ingredients: this.getIngredients(values.ingredients),
       slug: "tmp-slug",
       tags: values.tags,
@@ -60,8 +61,9 @@ class AddRecipeLayout extends React.Component {
       headers: whatever,
       body: JSON.stringify(body),
     }).then((res) => {
-      this.props.history.push(`/receipes/${res.data.id}`, { recipe: res.data });
-    });
+      this.props.history.push(`/recipes`);
+    }).catch(error=>{console.log(error)});
+
   };
 
   handleChange = (e) => {

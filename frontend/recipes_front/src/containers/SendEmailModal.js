@@ -14,6 +14,7 @@ const SendEmailModal = (props) => {
 
   const onFinish = (values) => {
     props.callback(values);
+    handleCancel();
   };
 
   const onFinishFailed = () => {

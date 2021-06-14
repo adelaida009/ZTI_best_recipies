@@ -85,7 +85,7 @@ class SendListView(APIView):
     def post(self, request, *args, **kwargs):
         message = ""
         e_mail = request.data.get("e-mail", None)
-        list = get_object_or_404(ShoppingList, user=request.user)
+        list = get_object_or_404(ShoppingList, user=1)
         ingridients = list.sum_ingridients()
         for ingridient in ingridients:
             message += f"{ingridient[0]} : {ingridient[1]} \n"
@@ -106,7 +106,7 @@ class AddToFavouritesView(APIView):
     def post(self, request, *args, **kwargs):
         slug = request.data.get("slug", None)
         recipe = get_object_or_404(Recipe, slug=slug)
-        favourite_qs = Favourities.objects.filter(user=request.user)
+        favourite_qs = Favourities.objects.filter(user=1)
         if favourite_qs:
             favourite = favourite_qs[0]
             if favourite.recipes.filter(slug=recipe.slug).exists():
@@ -115,7 +115,7 @@ class AddToFavouritesView(APIView):
                 favourite.recipes.add(recipe)
                 return Response({"message": "Przepis został dodany do ulubionych"}, status=HTTP_200_OK)
         else:
-            favourite = Favourities.objects.create(user=request.user)
+            favourite = Favourities.objects.create(user=1)
             favourite.recipes.add(recipe)
         return Response({"message" : "Przepis został dodany do ulubionych"}, status=HTTP_200_OK)
 
@@ -127,7 +127,7 @@ class AddToListView(APIView):
             recipe=recipe,
             user=request.user
         )
-        list_qs = ShoppingList.objects.filter(user=request.user)
+        list_qs = ShoppingList.objects.filter(user=1)
         if list_qs:
             list = list_qs[0]
             if list.ingridients.filter(recipe__slug=recipe.slug).exists():
@@ -138,7 +138,7 @@ class AddToListView(APIView):
                 list.ingridients.add(added_recipe)
                 return Response(status=HTTP_200_OK)
         else:
-            list = ShoppingList.objects.create(user=request.user,
+            list = ShoppingList.objects.create(user=1,
                                                creation_date = timezone.now())
             list.ingridients.add(added_recipe)
         return Response(status=HTTP_200_OK)
@@ -148,13 +148,13 @@ class RemoveFromListView(APIView):
     def post(self, request, *args, **kwargs):
         slug = request.data.get("slug")
         recipe = get_object_or_404(Recipe, slug=slug)
-        list_qs = ShoppingList.objects.filter(user=request.user)
+        list_qs = ShoppingList.objects.filter(user=1)
         if list_qs.exists():
             list = list_qs[0]
             if list.ingridients.filter(recipe__slug=recipe.slug).exists():
                 added_recipe = AddedRecipe.objects.filter(
                     recipe=recipe,
-                    user=request.user
+                    user=1
                 )[0]
                 if added_recipe.quantity > 1:
                     added_recipe.quantity -= 1
@@ -203,7 +203,7 @@ class RemoveFromFavouritiesView(APIView):
     def post(self, request, *args, **kwargs):
         slug = request.data.get("slug")
         recipe = get_object_or_404(Recipe, slug=slug)
-        favourities_qs = Favourities.objects.filter(user=request.user)
+        favourities_qs = Favourities.objects.filter(user=1)
         if favourities_qs.exists():
             favourities = favourities_qs[0]
             if favourities.recipes.filter(slug=recipe.slug).exists():

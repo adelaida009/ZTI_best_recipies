@@ -22,6 +22,7 @@ class ShoppingList extends React.Component {
   handleDeleteFromShoppingList = (slug) => {
     const whatever = {
       Authorization: `Token ` + localStorage.getItem("token"),
+      "Content-Type": "application/json",
     };
     this.setState({ loading: true });
     fetch(deleteFromShoppingListURL, {
@@ -36,6 +37,7 @@ class ShoppingList extends React.Component {
   handleSendEmail = (values) => {
     const whatever = {
       Authorization: `Token ` + localStorage.getItem("token"),
+      "Content-Type": "application/json",
     };
     this.setState({ loading: true });
     fetch(sendShoppingList, {
@@ -64,7 +66,8 @@ class ShoppingList extends React.Component {
         <SendEmailModal callback={this.handleSendEmail} />
         <Item.Group divided>
           {data.map((entry) => {
-            return entry.ingredients.map((item) => {
+          console.log({entry});
+            return entry.ingridients.map((item) => {
               return (
                 <Item key={item.id}>
                   <Item.Content>

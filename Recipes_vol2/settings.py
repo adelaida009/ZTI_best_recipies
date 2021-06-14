@@ -109,7 +109,7 @@ WSGI_APPLICATION = 'Recipes_vol2.wsgi.application'
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS':
         'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 8,
+    'PAGE_SIZE': 200,
     'DEFAULT_FILTER_BACKENDS': (
         'django_filters.rest_framework.DjangoFilterBackend',
         'rest_framework.filters.SearchFilter',
