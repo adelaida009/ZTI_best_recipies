@@ -1,10 +1,17 @@
 import React from "react";
-import { Container, Item, Message, Button, Icon, Label } from "semantic-ui-react";
+import {
+  Container,
+  Item,
+  Message,
+  Button,
+  Icon,
+  Label,
+} from "semantic-ui-react";
 
 import { connect } from "react-redux";
 import { fetchShoppingList } from "../store/actions/shoppingList";
 import { Redirect } from "react-router";
-import { deleteFromShoppingListURL, sendShoppingList } from "../constants";
+import { sendShoppingList } from "../constants";
 import SendEmailModal from "./SendEmailModal";
 
 class ShoppingList extends React.Component {
@@ -18,23 +25,6 @@ class ShoppingList extends React.Component {
     };
     this.props.reloadShoppingList();
   }
-
-  handleDeleteFromShoppingList = (slug) => {
-    const whatever = {
-      Authorization: `Token ` + localStorage.getItem("token"),
-      "Content-Type": "application/json",
-    };
-    this.setState({ loading: true });
-    fetch(deleteFromShoppingListURL, {
-      method: "POST",
-      headers: whatever,
-      body: JSON.stringify({ slug: slug }),
-    }).then((res) => {
-      this.props.reloadShoppingList();
-      console.log({slug});
-    });
-
-  };
 
   handleSendEmail = (values) => {
     const whatever = {
@@ -68,7 +58,6 @@ class ShoppingList extends React.Component {
         <SendEmailModal callback={this.handleSendEmail} />
         <Item.Group divided>
           {data.map((entry) => {
-          console.log({entry});
             return entry.ingridients.map((item) => {
               return (
                 <Item key={item.id}>
@@ -78,17 +67,6 @@ class ShoppingList extends React.Component {
                     </Item.Header>
                     <Item.Description>{item.recipe}</Item.Description>
                     <Item.Extra>
-                      <Button
-                        floated="right"
-                        primary
-                        icon
-                        onClick={() =>
-                          this.handleDeleteFromShoppingList(item.recipe)
-                        }
-                      >
-                        Delete from shopping list
-                        <Icon name="cart" />
-                      </Button>
                       <Label>{item.slug}</Label>
                     </Item.Extra>
                   </Item.Content>
