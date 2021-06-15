@@ -36,34 +36,6 @@ class FavouritesLayout extends React.Component {
         console.log(res2.results);
         this.setState({ data: res2.results[0].recipes, loading: false });
       });
-
-    // this.setState({
-    //   data: [
-    //     {
-    //       id: 1,
-    //       title: "#1 recipe fav",
-    //       photo: "no-photo",
-    //       description: "Example recipe #1",
-    //       ingredients: '{"makaron": 1, "pomidor": 2}',
-    //       created: "2021-04-03T13:12:42.377000Z",
-    //       created_by: 1,
-    //       slug: "recipe-1",
-    //       tags: "obiad, makaron",
-    //     },
-    //     {
-    //       id: 2,
-    //       title: "#2 recipe fav",
-    //       photo: "no-photo",
-    //       description: "Example recipe #2",
-    //       ingredients: '{"cebula": 1, "kurak": 2}',
-    //       created: "2021-04-03T13:12:42.377000Z",
-    //       created_by: 1,
-    //       slug: "recipe-2",
-    //       tags: "zupa",
-    //     },
-    //   ],
-    //   loading: false,
-    // });
   }
 
   handleDeleteFromFavourites = (slug) => {
@@ -78,6 +50,7 @@ class FavouritesLayout extends React.Component {
       body: JSON.stringify({ slug: slug }),
     }).then((res) => {
         this.setState({ loading: true });
+        console.log({slug});
             fetch("http://127.0.0.1:8000/api/favourites/", {
               headers: { "Content-Type": "application/json" },
             })

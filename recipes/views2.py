@@ -125,7 +125,7 @@ class AddToListView(APIView):
         recipe = get_object_or_404(Recipe, slug=slug)
         added_recipe, created = AddedRecipe.objects.get_or_create(
             recipe=recipe,
-            user=request.user
+            user=1
         )
         list_qs = ShoppingList.objects.filter(user=1)
         if list_qs:

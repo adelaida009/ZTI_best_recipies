@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Item, Message, Button, Icon } from "semantic-ui-react";
+import { Container, Item, Message, Button, Icon, Label } from "semantic-ui-react";
 
 import { connect } from "react-redux";
 import { fetchShoppingList } from "../store/actions/shoppingList";
@@ -31,7 +31,9 @@ class ShoppingList extends React.Component {
       body: JSON.stringify({ slug: slug }),
     }).then((res) => {
       this.props.reloadShoppingList();
+      console.log({slug});
     });
+
   };
 
   handleSendEmail = (values) => {
@@ -81,12 +83,13 @@ class ShoppingList extends React.Component {
                         primary
                         icon
                         onClick={() =>
-                          this.handleDeleteFromShoppingList(item.slug)
+                          this.handleDeleteFromShoppingList(item.recipe)
                         }
                       >
                         Delete from shopping list
                         <Icon name="cart" />
                       </Button>
+                      <Label>{item.slug}</Label>
                     </Item.Extra>
                   </Item.Content>
                 </Item>
