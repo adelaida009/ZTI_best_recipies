@@ -79,6 +79,7 @@ class AddedRecipe(models.Model):
             value = ingridients_json[k] * self.quantity
             values.append(value)
         result = list(zip(keys, values))
+        print(result)
         return result
 
 #Tworzenie modelu listy zakupów

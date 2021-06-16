@@ -95,8 +95,13 @@ class ReceipeDetails extends React.Component {
   };
 
   isInShoppingList = () => {
-    const find = this.state.shoppingList.find(
-      (shopping) => shopping.id === this.state.data.id
+    if(!this.state.shoppingList||this.state.shoppingList.length<1){
+      return false;
+    }
+    const find = this.state.shoppingList[0].ingridients.find(
+      (shopping) => {
+      return shopping.recipe === this.state.data.slug;
+      }
     );
     return !!find;
   };

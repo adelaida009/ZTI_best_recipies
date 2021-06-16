@@ -46,7 +46,7 @@ class AddedRecipeSerializer(serializers.ModelSerializer):
         fields = (
         "id",
         "recipe",
-        "quantity"
+        "quantity",
         )
 
 class ShoppingListSerializer(serializers.ModelSerializer):

@@ -17,13 +17,13 @@ import SendEmailModal from "./SendEmailModal";
 class ShoppingList extends React.Component {
   constructor(props) {
     super(props);
-    console.log({ props });
     this.state = {
       loading: false,
       error: null,
       ...props,
     };
     this.props.reloadShoppingList();
+    console.log(this.state);
   }
 
   handleSendEmail = (values) => {

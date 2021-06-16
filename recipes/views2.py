@@ -174,14 +174,14 @@ class ListDetailView(ListAPIView):
     serializer_class = ShoppingListSerializer
     permission_classes = (AllowAny, )
 
-    queryset = ShoppingList.objects.all()
+    #queryset = ShoppingList.objects.all()
 
-    # def get_queryset(self):
-    #     try:
-    #         list = ShoppingList.objects.filter(user=self.request.user)
-    #         return list
-    #     except:
-    #         return Response({"message": "Brak listy zakupów"}, status=HTTP_400_BAD_REQUEST)
+    def get_queryset(self):
+        try:
+            list = ShoppingList.objects.filter(user=1)
+            return list
+        except:
+            return Response({"message": "Brak listy zakupów"}, status=HTTP_400_BAD_REQUEST)
 
 class FavouritesView(ListAPIView):
     serializer_class = FavouritesSerializer
