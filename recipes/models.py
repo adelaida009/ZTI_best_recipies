@@ -109,7 +109,7 @@ class ShoppingList(models.Model):
                 if not found:
                     items[element[0]] = element[1]
                 found = False
-        return items.items()
+        return items
 
     def send_list_url(self):
         ingridients = self.sum_ingridients()

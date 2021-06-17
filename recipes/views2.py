@@ -11,6 +11,8 @@ from django.shortcuts import  render, get_object_or_404
 from django.utils import timezone
 from .models import Recipe, AddedRecipe, ShoppingList, Favourities
 from django.core.mail import send_mail
+from django.http import HttpResponse
+import json
 
 class RecipeFilter(django_filters.FilterSet):
     title = AllValuesFilter(name="title")
@@ -143,6 +145,28 @@ class AddToListView(APIView):
             list.ingridients.add(added_recipe)
         return Response(status=HTTP_200_OK)
 
+ ####################TEST###################################################
+ #test view teraz zwraca JSONA slownika (wywoluje funkcje sum_ingredients i wysyla info na serwer)
+ #odpowiedzia jest JSON
+ #czy da sie wyciaganac wszystkie klucze i wszystkie wartosci
+class ListTestView(APIView):
+    def get(self, request, *args, **kwargs):
+        list_qs = ShoppingList.objects.filter(user=1)
+        if list_qs:
+            list = list_qs[0]
+            items = list.sum_ingridients()
+            slugs = []
+            recipes = list.ingridients.all()
+            for recipe in recipes:
+                slug = recipe.recipe.slug
+                slugs.append(slug)
+            print(slugs)
+            items["slugs"] = slugs
+            #return Response({"message": f"{items}"}, status=HTTP_200_OK)
+            return HttpResponse(json.dumps(items), content_type="application/json")
+        else:
+            return Response(status=HTTP_400_BAD_REQUEST)
+ ####################TEST###################################################
 
 class RemoveFromListView(APIView):
     def post(self, request, *args, **kwargs):
