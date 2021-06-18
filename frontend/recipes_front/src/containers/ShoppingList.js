@@ -57,22 +57,19 @@ class ShoppingList extends React.Component {
         )}
         <SendEmailModal callback={this.handleSendEmail} />
         <Item.Group divided>
-          {data.map((entry) => {
-            return entry.ingridients.map((item) => {
+          {Object.keys(data).map((key) => {
+            if (key !== "slugs") {
+              const quantity = data[key];
               return (
-                <Item key={item.id}>
+                <Item key={`${key}-${quantity}`}>
                   <Item.Content>
                     <Item.Header>
-                      {item.name}: {item.quantity}
+                      {key}: {quantity}
                     </Item.Header>
-                    <Item.Description>{item.recipe}</Item.Description>
-                    <Item.Extra>
-                      <Label>{item.slug}</Label>
-                    </Item.Extra>
                   </Item.Content>
                 </Item>
               );
-            });
+            }
           })}
         </Item.Group>
       </Container>
@@ -81,7 +78,7 @@ class ShoppingList extends React.Component {
 }
 const mapStateToProps = (state) => {
   return {
-    data: state.shoppingList.shoppingList,
+    data: state.shoppingList.shoppingList || {},
   };
 };
 
