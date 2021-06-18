@@ -151,6 +151,7 @@ class AddToListView(APIView):
  #czy da sie wyciaganac wszystkie klucze i wszystkie wartosci
 class ListTestView(APIView):
     def get(self, request, *args, **kwargs):
+        #self.request.user #todo zmienic to!!!
         list_qs = ShoppingList.objects.filter(user=1)
         if list_qs:
             list = list_qs[0]

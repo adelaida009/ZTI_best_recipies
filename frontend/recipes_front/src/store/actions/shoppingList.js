@@ -27,7 +27,8 @@ export const fetchShoppingList = () => {
     axios
       .get("http://127.0.0.1:8000/api/list-summary")
       .then((response) => {
-        const shoppingList = response.data.results;
+        console.log(response.data);
+        const shoppingList = response.data;
         // const shoppingList = {
         //   jajka: 2,
         //   sól: 1,
