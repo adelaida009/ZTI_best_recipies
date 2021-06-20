@@ -14,8 +14,6 @@ import {Input} from "antd";
 import { Icon } from '@ant-design/compatible';
 import 'antd/dist/antd.css';
 
-//Const FormItem = Form.Item;
-
 class RegistrationForm extends React.Component {
   state = {
     username: "",
@@ -33,67 +31,6 @@ class RegistrationForm extends React.Component {
   handleChange = e => {
     this.setState({ [e.target.name]: e.target.value });
   }
-
-/*  handleConfirmBlur = e => {
-    const value = e.target.value;
-    this.setState({ confirmDirty: this.state.confirmDirty || !!value });
-  }*/
-
-/*  compareToFirstPassword = (rule, value, callback) => {
-    const form = this.props.form;
-    if (value && value !== form.getFieldValue('password')) {
-      callback('Two passwords that you enter is inconsistent!');
-    } else {
-      callback();
-    }
-  }
-
-  validateToNextPassword = (rule, value, callback) => {
-    const form = this.props.form;
-    if (value && this.state.confirmDirty) {
-      form.validateFields(['confirm'], { force: true });
-    }
-    callback();
-  }*/
-
-/*  render() {
-    //const { getFieldDecorator } = this.props.form;
-    const { username, email, password1, password2 } = this.state;
-    const { error, loading, token } = this.props;
-    if (token) {
-      return <Redirect to="/" />;
-    }
-    return (
-      <Form onSubmit={this.handleSubmit}>
-
-        <Form.Item name = 'userName' rules={[{ required: true, message: 'Please input your username!' }]}>
-            <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Username" />
-        </Form.Item>
-
-        <Form.Item name ='email' rules = {[{ type: 'email', message: 'The input is not valid E-mail!' }]}>
-            <Input prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Email" />
-        </Form.Item>
-        {/!*, validator: this.validateToNextPassword*!/}
-        <Form.Item name = 'password1' rules = {[{ required: true, message: 'Please input your password!'}]}>
-            <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password1" placeholder="Password" onBlur={this.handleConfirmBlur} />
-        </Form.Item>
-        {/!*, validator: this.compareToFirstPassword*!/}
-        <Form.Item name = 'password2' rules = {[{required: true, message: 'Please confirm your password!'}]}>
-            <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password2" placeholder="Password" onBlur={this.handleConfirmBlur} />
-        </Form.Item>
-        <Form.Item>
-          <Button type="primary" htmlType="submit" style={{marginRight: '10px'}}>
-            Signup
-          </Button>
-          Or
-          <NavLink
-            style={{marginRight: '10px'}}
-            to='/login/'> login
-          </NavLink>
-        </Form.Item>
-      </Form>
-    );
-  }*/
 
   render() {
     const { username, email, password1, password2 } = this.state;

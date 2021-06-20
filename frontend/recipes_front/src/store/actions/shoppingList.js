@@ -29,17 +29,6 @@ export const fetchShoppingList = () => {
       .then((response) => {
         console.log(response.data);
         const shoppingList = response.data;
-        // const shoppingList = {
-        //   jajka: 2,
-        //   sól: 1,
-        //   Drożdże: "50g",
-        //   salami: 2,
-        //   slugs: [
-        //     "jajecznica-2021-05-03-1202180188380000",
-        //     "pizza-2021-05-03-1205135176620000",
-        //     "recipe-1",
-        //   ],
-        // };
 
         dispatch(fetchShoppingListSuccess(shoppingList));
       })

@@ -60,10 +60,6 @@ class FavouritesLayout extends React.Component {
                 this.setState({ data: res2.results[0].recipes, loading: false });
               });
     });
-
-    // this.setState({
-    //   data: this.state.data.filter((recipe) => recipe.slug !== slug),
-    // });
   };
 
   render() {

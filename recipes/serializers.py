@@ -6,8 +6,6 @@ class StringSerializer(serializers.StringRelatedField):
         return value
 
 class RecipeSerializer(serializers.ModelSerializer):
-    #created_by = serializers.SerializerMethodField()
-    #ingredients = serializers.SerializerMethodField()
     class Meta:
         model = Recipe
         fields = (
@@ -21,13 +19,6 @@ class RecipeSerializer(serializers.ModelSerializer):
         "slug",
         "tags"
         )
-
-    #def get_created_by(self, obj):
-    #    return obj.get_created_by_display()
-    #def get_ingredients(self, obj):
-    #    return obj.get_ingredients_display()
-
-
 
 class FavouritesSerializer(serializers.Serializer):
     recipes = RecipeSerializer(read_only = True, many=True)

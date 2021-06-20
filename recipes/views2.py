@@ -78,7 +78,6 @@ class MyRecipesView(ListAPIView):
     def get_queryset(self):
         try:
             recipes = Recipe.objects.filter(created_by=self.request.user)
-            #favourites = Favourities.objects.get(user=self.request.user)
             return recipes
         except:
             return Response({"message": "Nie stworzyłeś żadnych przepisów"}, status=HTTP_400_BAD_REQUEST)
@@ -87,7 +86,7 @@ class SendListView(APIView):
     def post(self, request, *args, **kwargs):
         message = ""
         e_mail = request.data.get("e-mail", None)
-        list = get_object_or_404(ShoppingList, user=1)
+        list = get_object_or_404(ShoppingList, user=request.user)
         ingridients = list.sum_ingridients()
         for ingridient in ingridients:
             message += f"{ingridient[0]} : {ingridient[1]} \n"
@@ -98,17 +97,13 @@ class SendListView(APIView):
             [f"{e_mail}"],
             fail_silently=False,
         )
-        #list.detele()
-        #AddedRecipe.objects.filter(user=request.user).delete()
-        print(message)
-        #return Response({"message" : f"{request.user}"}, status=HTTP_200_OK)
         return Response({"message" : "Lista została wysłana"}, status=HTTP_200_OK)
 
 class AddToFavouritesView(APIView):
     def post(self, request, *args, **kwargs):
         slug = request.data.get("slug", None)
         recipe = get_object_or_404(Recipe, slug=slug)
-        favourite_qs = Favourities.objects.filter(user=1)
+        favourite_qs = Favourities.objects.filter(user=request.user)
         if favourite_qs:
             favourite = favourite_qs[0]
             if favourite.recipes.filter(slug=recipe.slug).exists():
@@ -117,7 +112,7 @@ class AddToFavouritesView(APIView):
                 favourite.recipes.add(recipe)
                 return Response({"message": "Przepis został dodany do ulubionych"}, status=HTTP_200_OK)
         else:
-            favourite = Favourities.objects.create(user=1)
+            favourite = Favourities.objects.create(user=request.user)
             favourite.recipes.add(recipe)
         return Response({"message" : "Przepis został dodany do ulubionych"}, status=HTTP_200_OK)
 
@@ -127,9 +122,9 @@ class AddToListView(APIView):
         recipe = get_object_or_404(Recipe, slug=slug)
         added_recipe, created = AddedRecipe.objects.get_or_create(
             recipe=recipe,
-            user=1
+            user=request.user
         )
-        list_qs = ShoppingList.objects.filter(user=1)
+        list_qs = ShoppingList.objects.filter(user=request.user)
         if list_qs:
             list = list_qs[0]
             if list.ingridients.filter(recipe__slug=recipe.slug).exists():
@@ -140,19 +135,15 @@ class AddToListView(APIView):
                 list.ingridients.add(added_recipe)
                 return Response(status=HTTP_200_OK)
         else:
-            list = ShoppingList.objects.create(user=1,
+            list = ShoppingList.objects.create(user=request.user,
                                                creation_date = timezone.now())
             list.ingridients.add(added_recipe)
         return Response(status=HTTP_200_OK)
 
- ####################TEST###################################################
- #test view teraz zwraca JSONA slownika (wywoluje funkcje sum_ingredients i wysyla info na serwer)
- #odpowiedzia jest JSON
- #czy da sie wyciaganac wszystkie klucze i wszystkie wartosci
+
 class ListTestView(APIView):
     def get(self, request, *args, **kwargs):
-        #self.request.user #todo zmienic to!!!
-        list_qs = ShoppingList.objects.filter(user=1)
+        list_qs = ShoppingList.objects.filter(user=request.user)
         if list_qs:
             list = list_qs[0]
             items = list.sum_ingridients()
@@ -163,23 +154,21 @@ class ListTestView(APIView):
                 slugs.append(slug)
             print(slugs)
             items["slugs"] = slugs
-            #return Response({"message": f"{items}"}, status=HTTP_200_OK)
             return HttpResponse(json.dumps(items), content_type="application/json")
         else:
             return Response(status=HTTP_400_BAD_REQUEST)
- ####################TEST###################################################
 
 class RemoveFromListView(APIView):
     def post(self, request, *args, **kwargs):
         slug = request.data.get("slug")
         recipe = get_object_or_404(Recipe, slug=slug)
-        list_qs = ShoppingList.objects.filter(user=1)
+        list_qs = ShoppingList.objects.filter(user=request.user)
         if list_qs.exists():
             list = list_qs[0]
             if list.ingridients.filter(recipe__slug=recipe.slug).exists():
                 added_recipe = AddedRecipe.objects.filter(
                     recipe=recipe,
-                    user=1
+                    user=request.user
                 )[0]
                 if added_recipe.quantity > 1:
                     added_recipe.quantity -= 1
@@ -199,36 +188,25 @@ class ListDetailView(ListAPIView):
     serializer_class = ShoppingListSerializer
     permission_classes = (AllowAny, )
 
-    #queryset = ShoppingList.objects.all()
-
     def get_queryset(self):
         try:
-            list = ShoppingList.objects.filter(user=1)
+            list = ShoppingList.objects.filter(user=request.user)
             return list
         except:
             return Response({"message": "Brak listy zakupów"}, status=HTTP_400_BAD_REQUEST)
 
 class FavouritesView(ListAPIView):
     serializer_class = FavouritesSerializer
-    #queryset = Favourities.objects.all()
     permission_classes = (AllowAny, )
 
     queryset = Favourities.objects.all()
-
-    # def get_queryset(self):
-    #     try:
-    #         favourites = Favourities.objects.filter(user=self.request.user)
-    #         #favourites = Favourities.objects.get(user=self.request.user)
-    #         return favourites
-    #     except:
-    #         return Response({"message": "Brak ulubionych"}, status=HTTP_400_BAD_REQUEST)
 
 
 class RemoveFromFavouritiesView(APIView):
     def post(self, request, *args, **kwargs):
         slug = request.data.get("slug")
         recipe = get_object_or_404(Recipe, slug=slug)
-        favourities_qs = Favourities.objects.filter(user=1)
+        favourities_qs = Favourities.objects.filter(user=request.user)
         if favourities_qs.exists():
             favourities = favourities_qs[0]
             if favourities.recipes.filter(slug=recipe.slug).exists():
